@@ -1,8 +1,8 @@
-# 🏥 AccrediX — Portail d'Auto-Évaluation GRI (INEAS)
+# 🏥 AccrediX — Portail d'Auto-Évaluation GRI 
 
-**AccrediX** est une plateforme web d'évaluation et de pilotage de la **Gestion des Risques Infectieux (GRI)** conçue pour l'**INEAS** (Instance Nationale d'Évaluation et d'Accréditation en Santé).
+**AccrediX** est une plateforme web d'évaluation et de pilotage de la **Gestion des Risques Infectieux (GRI)
 
-Elle permet aux établissements de santé (hôpitaux publics, CHU, cliniques privées) de réaliser leur auto-évaluation sur les critères officiels de l'INEAS, de soumettre leurs preuves documentaires, de bénéficier d'une assistance intelligente propulsée par IA (Groq), et permet à l'INEAS de superviser l'état d'avancement national en temps réel.
+Elle permet aux établissements de santé (hôpitaux publics, CHU, cliniques privées) de réaliser leur auto-évaluation sur les critères officiels de l', de soumettre leurs preuves documentaires, de bénéficier d'une assistance intelligente propulsée par IA (Groq), et permet à l' de superviser l'état d'avancement national en temps réel.
 
 ---
 
@@ -14,12 +14,12 @@ L'arborescence du projet est organisée de manière modulaire et maintenable :
 AccrediX/
 │
 ├── 📂 public/              # Fichiers statiques servis au navigateur
-│   ├── admin.html          # Dashboard national de supervision INEAS (Administrateur)
+│   ├── admin.html          # Dashboard national de supervision  (Administrateur)
 │   ├── hospital.html       # Espace d'accueil et statut de l'établissement
 │   ├── index.html          # Grille d'auto-évaluation GRI & intégration IA
 │   ├── login.html          # Page d'authentification unique (Admin & Hôpitaux)
 │   └── 📂 assets/
-│       └── logo_ineas.png  # Logo officiel de l'INEAS
+│       └── logo_.png  # Logo officiel de l'
 │
 ├── 📂 server/              # Backend HTTP natif Node.js
 │   └── server.js           # Serveur HTTP, routage API REST, auth JWT, proxy Groq & SMTP
@@ -85,7 +85,7 @@ Puis accédez à votre navigateur : **`http://localhost:3001`** (redirection aut
 
 Pour vos présentations et tests, les comptes suivants sont préconfigurés dans `data/users.json` :
 
-### 🛡️ Compte Administrateur (INEAS)
+### 🛡️ Compte Administrateur ()
 | Rôle | Identifiant (Username) | Mot de passe | Accès / Permissions |
 | :--- | :--- | :--- | :--- |
 | **Admin National** | `admin` | `adminpassword` | Vue globale de tous les hôpitaux, création d'établissements, statistiques, messagerie |
@@ -95,7 +95,6 @@ Pour vos présentations et tests, les comptes suivants sont préconfigurés dans
 | :--- | :--- | :--- | :--- |
 | `h1` | `hospitalpass1` | CHU Charles Nicolle | Tunis (CHU) |
 | `h2` | `hospitalpass2` | CHU La Rabta | Tunis (CHU) |
-| `h3` | `hospitalpass3` | Hôpital Militaire Principal (HMPIT) | Tunis (Hôpital Militaire) |
 | `h4` | `hospitalpass4` | CHU Sahloul | Sousse (CHU) |
 | `h5` | `hospitalpass5` | CHU Farhat Hached | Sousse (CHU) |
 | `h6` | `hospitalpass6` | CHU Hédi Chaker | Sfax (CHU) |
@@ -138,7 +137,7 @@ Pour vos présentations et tests, les comptes suivants sont préconfigurés dans
                                       │ • Évaluation critères   │
                                       │ • Import & lecture PDF  │
                                       │ • Recommandations IA    │
-                                      │ • Échange direct INEAS  │
+                                      │ • Échange direct   │
                                       │ • Export du rapport     │
                                       └─────────────────────────┘
 ```
@@ -149,9 +148,9 @@ Pour vos présentations et tests, les comptes suivants sont préconfigurés dans
    - Évaluation détaillée des critères de référence du guide GRI (9 Références).
    - Analyse automatique de documents de preuve au format PDF via `pdf.js`.
    - Recommandations personnalisées assistées par LLM (Groq API).
-   - Fil de discussion direct entre l'hôpital et les évaluateurs INEAS.
-   - **Rapport Officiel d'Accréditation INEAS** : Générateur de document officiel au format ministériel A4 (en-tête République Tunisienne/INEAS, logo officiel, matrice des 9 références, synthèses détaillées, analyse stratégique, conclusions institutionnelles avec recommandations, et doubles cadres de signatures/cachets).
-4. **Dashboard Superviseur INEAS (`/admin.html`)** :
+   - Fil de discussion direct entre l'hôpital et les évaluateurs .
+   - **Rapport Officiel d'Accréditation ** : Générateur de document officiel au format ministériel A4 (en-tête République Tunisienne/, logo officiel, matrice des 9 références, synthèses détaillées, analyse stratégique, conclusions institutionnelles avec recommandations, et doubles cadres de signatures/cachets).
+4. **Dashboard Superviseur  (`/admin.html`)** :
    - Vue matricielle de tous les établissements tunisiens inscrits.
    - Statistiques de taux de conformité, calcul automatique de niveau (1 à 5).
    - Accès direct au dossier d'évaluation et au **Rapport Officiel** de chaque établissement.
@@ -162,6 +161,6 @@ Pour vos présentations et tests, les comptes suivants sont préconfigurés dans
 ## 🛠️ Caractéristiques Techniques
 
 - **Serveur** : Node.js standard (`http`, `fs`, `path`, `crypto`) sans framework lourd pour une portabilité maximale et un déploiement ultra-léger.
-- **Frontend** : HTML5, CSS moderne avec design épuré conforme à l'identité visuelle de l'INEAS, Vanilla JavaScript interactif.
+- **Frontend** : HTML5, CSS moderne avec design épuré conforme à l'identité visuelle de l', Vanilla JavaScript interactif.
 - **Sécurité** : Tokens HMAC SHA-256 avec expiration, variables sensibles isolées dans `.env`, filtrage anti-traversée de répertoire pour les fichiers statiques.
 - **Persistance** : Fichiers JSON structurés dans le dossier `data/`.
