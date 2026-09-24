@@ -1,0 +1,106 @@
+[
+  {
+    "id": "h1",
+    "name": "CHU Charles Nicolle",
+    "level": 4,
+    "city": "Tunis",
+    "type": "Centre Hospitalier Universitaire",
+    "createdAt": "2026-09-20T10:00:00.000Z"
+  },
+  {
+    "id": "h2",
+    "name": "CHU La Rabta",
+    "level": 3,
+    "city": "Tunis",
+    "type": "Centre Hospitalier Universitaire",
+    "createdAt": "2026-09-18T10:00:00.000Z"
+  },
+  {
+    "id": "h3",
+    "name": "Hôpital Militaire Principal d'Instruction de Tunis (HMPIT)",
+    "level": 4,
+    "city": "Tunis",
+    "type": "Hôpital Militaire",
+    "createdAt": "2026-09-15T10:00:00.000Z"
+  },
+  {
+    "id": "h4",
+    "name": "CHU Sahloul",
+    "level": 3,
+    "city": "Sousse",
+    "type": "Centre Hospitalier Universitaire",
+    "createdAt": "2026-09-16T10:00:00.000Z"
+  },
+  {
+    "id": "h5",
+    "name": "CHU Farhat Hached",
+    "level": 3,
+    "city": "Sousse",
+    "type": "Centre Hospitalier Universitaire",
+    "createdAt": "2026-09-14T10:00:00.000Z"
+  },
+  {
+    "id": "h6",
+    "name": "CHU Hédi Chaker",
+    "level": 3,
+    "city": "Sfax",
+    "type": "Centre Hospitalier Universitaire",
+    "createdAt": "2026-09-12T10:00:00.000Z"
+  },
+  {
+    "id": "h7",
+    "name": "CHU Habib Bourguiba",
+    "level": 3,
+    "city": "Sfax",
+    "type": "Centre Hospitalier Universitaire",
+    "createdAt": "2026-09-10T10:00:00.000Z"
+  },
+  {
+    "id": "h8",
+    "name": "CHU Fattouma Bourguiba",
+    "level": 4,
+    "city": "Monastir",
+    "type": "Centre Hospitalier Universitaire",
+    "createdAt": "2026-09-11T10:00:00.000Z"
+  },
+  {
+    "id": "h9",
+    "name": "Hôpital Régional Menzel Bourguiba",
+    "level": 2,
+    "city": "Bizerte",
+    "type": "Hôpital Régional",
+    "createdAt": "2026-09-13T10:00:00.000Z"
+  },
+  {
+    "id": "h10",
+    "name": "Hôpital Régional Mohamed Tlatli",
+    "level": 2,
+    "city": "Nabeul",
+    "type": "Hôpital Régional",
+    "createdAt": "2026-09-17T10:00:00.000Z"
+  },
+  {
+    "id": "h11",
+    "name": "CHU Taher Sfar",
+    "level": 3,
+    "city": "Mahdia",
+    "type": "Centre Hospitalier Universitaire",
+    "createdAt": "2026-09-19T10:00:00.000Z"
+  },
+  {
+    "id": "h12",
+    "name": "Clinique Taoufik",
+    "level": 4,
+    "city": "Tunis",
+    "type": "Clinique Privée",
+    "createdAt": "2026-09-21T10:00:00.000Z"
+  },
+  {
+    "id": "h13",
+    "name": "Polyclinique Les Jasmins",
+    "level": 4,
+    "city": "Tunis",
+    "type": "Clinique Privée",
+    "createdAt": "2026-09-22T10:00:00.000Z"
+  }
+]

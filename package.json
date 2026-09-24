@@ -1,0 +1,14 @@
+{
+  "name": "accredix",
+  "version": "1.0.0",
+  "description": "Portail d'auto-évaluation GRI pour l'INEAS",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "test:email": "node scripts/test_email.js"
+  },
+  "dependencies": {
+    "dotenv": "^18.0.3",
+    "nodemailer": "^10.0.10"
+  }
+}

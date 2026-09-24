@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Supervision Nationale Admin — AccrediX </title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --panel-bg: #ffffff;
+      --border: #e2e8f0;
+      --primary: #1e3a8a;
+      --primary-hover: #1d4ed8;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --success: #16a34a;
+      --warning: #d97706;
+      --danger: #dc2626;
+      --shadow-card: 0 4px 12px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.02);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Top Institutional Bar */
+    .top-gov-bar {
+      background: #0f172a;
+      color: #cbd5e1;
+      padding: 8px 36px;
+      font-size: 0.775rem;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 3px solid #1e3a8a;
+    }
+
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      padding: 16px 36px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand img {
+      height: 48px;
+      object-fit: contain;
+    }
+
+    .brand h2 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: -0.02em;
+    }
+
+    .brand p {
+      font-size: 0.785rem;
+      color: var(--text-muted);
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #f1f5f9;
+      padding: 6px 14px;
+      border-radius: 30px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .role-badge {
+      background: #f3e8ff;
+      color: #6b21a8;
+      border: 1px solid #e9d5ff;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.725rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .btn-logout {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+
+    .btn-logout:hover {
+      background: #fee2e2;
+    }
+
+    main {
+      flex: 1;
+      max-width: 1280px;
+      width: 100%;
+      margin: 32px auto;
+      padding: 0 24px 60px;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 28px;
+    }
+
+    .page-title h1 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+    }
+
+    .page-title p {
+      color: var(--text-muted);
+      margin-top: 4px;
+      font-size: 0.925rem;
+    }
+
+    .btn-add-hospital {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.875rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(30, 58, 138, 0.2);
+    }
+
+    .btn-add-hospital:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+      border-left: 4px solid var(--primary);
+    }
+
+    .stat-card span {
+      font-size: 0.775rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+    }
+
+    .stat-card .stat-value {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-top: 8px;
+      color: #0f172a;
+    }
+
+    .stat-card .stat-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .table-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+    }
+
+    .table-toolbar {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f8fafc;
+    }
+
+    .search-box input {
+      padding: 10px 16px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.875rem;
+      outline: none;
+      width: 320px;
+    }
+
+    .search-box input:focus {
+      border-color: var(--primary);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th {
+      background: #f1f5f9;
+      padding: 16px 24px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: #334155;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.925rem;
+      vertical-align: middle;
+    }
+
+    tr:hover {
+      background: #f8fafc;
+    }
+
+    .hosp-name {
+      font-weight: 700;
+      color: #0f172a;
+      font-size: 0.975rem;
+    }
+
+    .hosp-meta {
+      font-size: 0.785rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .level-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.8rem;
+    }
+
+    .level-1 {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    .level-2 {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    .level-3 {
+      background: #dbeafe;
+      color: #1e40af;
+      border: 1px solid #bfdbfe;
+    }
+
+    .level-4 {
+      background: #ccfbf1;
+      color: #115e59;
+      border: 1px solid #99f6e4;
+    }
+
+    .level-5 {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+
+    .btn-access {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--primary);
+      color: #ffffff;
+      padding: 8px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.85rem;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 6px rgba(30, 58, 138, 0.15);
+    }
+
+    .btn-access:hover {
+      background: var(--primary-hover);
+      box-shadow: 0 4px 12px rgba(30, 58, 138, 0.25);
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .modal-content {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 32px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .modal-header h3 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.785rem;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .btn-save {
+      flex: 1;
+      padding: 12px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-cancel {
+      padding: 12px 20px;
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="top-gov-bar">
+    <div>AccrediX — Plateforme intelligente d'accréditation des établissements de santé
+    </div>
+    <div>Espace de Supervision et Régulation Nationale </div>
+  </div>
+
+  <header>
+    <div class="brand">
+      <img src="assets/logo_ineas.png" alt="INEAS" onerror="this.style.display='none'">
+      <div>
+        <h2>AccrediX — Dashboard National</h2>
+        <p>Portail Intelligent d’Accréditation et de Supervision des Hôpitaux</p>
+      </div>
+    </div>
+    <div class="user-info">
+      <div class="user-profile">
+        <div class="user-avatar">A</div>
+        <span id="userName" style="font-weight: 700; font-size: 0.875rem;">Administrateur</span>
+      </div>
+      <span class="role-badge">SUPER ADMIN</span>
+      <button onclick="openAdminDiscussionModal()"
+        style="position: relative; background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; padding: 8px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s;">
+        💬 Discussions
+        <span id="adminNotifBadge"
+          style="display:none; background: #dc2626; color: white; font-size: 0.725rem; font-weight: 800; border-radius: 20px; padding: 2px 8px; margin-left: 2px; box-shadow: 0 0 8px rgba(220, 38, 38, 0.4);">0</span>
+      </button>
+      <button class="btn-logout" onclick="logout()">Déconnexion</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <div class="page-title">
+        <h1>Supervision des Établissements de Santé</h1>
+        <p>Suivi des processus d'auto-évaluation et des niveaux de conformité aux normes nationales.</p>
+      </div>
+      <button class="btn-add-hospital" onclick="openAddModal()">
+        <span>+</span> Enregistrer un Établissement
+      </button>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span>Établissements Suivis</span>
+        <div class="stat-value" id="statTotal">-</div>
+        <div class="stat-sub">Hôpitaux et CHU enregistrés</div>
+      </div>
+      <div class="stat-card">
+        <span>Niveau Moyen National</span>
+        <div class="stat-value" id="statAvgLevel" style="color: var(--primary);">-</div>
+        <div class="stat-sub">Moyenne sur 5 niveaux d'accréditation</div>
+      </div>
+      <div class="stat-card" style="border-left-color: var(--success);">
+        <span>Statut de la Plateforme</span>
+        <div class="stat-value" style="color: var(--success); font-size: 1.5rem; margin-top: 8px;">● Conforme</div>
+        <div class="stat-sub">Base de données synchronisée</div>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-toolbar">
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Rechercher par nom, ville ou code..."
+            oninput="filterTable()">
+        </div>
+        <span style="font-size: 0.85rem; color: var(--text-muted);" id="tableCountLabel">Chargement...</span>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Établissement de Santé</th>
+            <th>Catégorie / Ville</th>
+            <th>Délai (15 Jours Max)</th>
+            <th>Niveau d'Accréditation</th>
+            <th style="text-align: right;">Action Officielle</th>
+          </tr>
+        </thead>
+        <tbody id="hospitalsTableBody">
+          <tr>
+            <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 40px;">
+              Chargement des données officielles...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <div class="modal-overlay" id="addModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Enregistrer un nouvel Établissement</h3>
+        <button class="modal-close" onclick="closeAddModal()">&times;</button>
+      </div>
+      <form id="addHospitalForm">
+        <div class="form-group">
+          <label>Nom Officiel de l'établissement</label>
+          <input type="text" id="hospNameInput" placeholder="Ex: CHU Charles Nicolle, CHU Sahloul..." required>
+        </div>
+        <div class="form-group">
+          <label>Catégorie</label>
+          <select id="hospTypeInput">
+            <option value="Centre Hospitalier Universitaire">Centre Hospitalier Universitaire (CHU)</option>
+            <option value="Hôpital Régional">Hôpital Régional (HR)</option>
+            <option value="Hôpital Militaire">Hôpital Militaire (HMI)</option>
+            <option value="Institut National Spécialisé">Institut National Spécialisé</option>
+            <option value="Clinique Privée">Clinique Privée / Polyclinique</option>
+            <option value="Hôpital de Circonscription">Hôpital de Circonscription (HC)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Ville / Région</label>
+          <input type="text" id="hospCityInput" placeholder="Ex: Tunis, Sousse, Sfax, Monastir, Bizerte, Nabeul..." required>
+        </div>
+
+        <div style="border-top: 1px solid var(--border); margin: 20px 0 16px; padding-top: 16px;">
+          <h4
+            style="font-size: 0.85rem; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 800; margin-bottom: 14px;">
+            🔑 Compte d'Accès Officiel de l'Hôpital</h4>
+
+          <div class="form-group">
+            <label>Identifiant d'Accès (Username)</label>
+            <input type="text" id="hospUsernameInput" placeholder="Ex: chu_nicolle" required>
+          </div>
+          <div class="form-group">
+            <label>Mot de passe initial</label>
+            <input type="text" id="hospPasswordInput" placeholder="Ex: Nicolle2026!" required>
+          </div>
+          <div class="form-group">
+            <label>Adresse E-mail Officielle (pour notification)</label>
+            <input type="email" id="hospEmailInput" placeholder="Ex: direction@chu-charlesnicolle.tn" required>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" onclick="closeAddModal()">Annuler</button>
+          <button type="submit" class="btn-save" id="btnSaveHosp">Valider & Envoyer par E-mail ✉️</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="adminDiscussionModal">
+    <div class="modal-content" style="max-width: 680px;">
+      <div class="modal-header">
+        <h3>💬 Centre de Messagerie & Notifications INEAS</h3>
+        <button class="modal-close" onclick="closeAdminDiscussionModal()">&times;</button>
+      </div>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">Consultez les messages envoyés par
+        les établissements de santé et répondez à leurs demandes de clarification.</p>
+      <div id="adminDiscussionContent"
+        style="max-height: 420px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px;">
+        <div style="text-align: center; color: var(--text-muted); padding: 30px;">Chargement des discussions...</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
+    let allHospitals = [];
+
+    if (!token || role !== 'admin') {
+      window.location.href = '/login.html';
+    }
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = '/login.html';
+    }
+
+    async function fetchAdminDiscussions() {
+      try {
+        const res = await fetch('/api/admin/discussions', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        const notifBadge = document.getElementById('adminNotifBadge');
+        if (data.totalHospitalMessages > 0) {
+          notifBadge.style.display = 'inline-block';
+          notifBadge.textContent = data.totalHospitalMessages;
+        } else {
+          notifBadge.style.display = 'none';
+        }
+
+        renderAdminDiscussionsModal(data.hospitals || []);
+      } catch (e) {
+        console.error('Erreur chargement notifications admin', e);
+      }
+    }
+
+    function renderAdminDiscussionsModal(hospitalsList) {
+      const container = document.getElementById('adminDiscussionContent');
+      if (!container) return;
+
+      if (!hospitalsList || hospitalsList.length === 0) {
+        container.innerHTML = '<div style="text-align:center; padding:30px; color:var(--text-muted);">Aucune discussion en cours.</div>';
+        return;
+      }
+
+      container.innerHTML = hospitalsList.map(h => {
+        const last = h.lastMessage;
+        const targetUrl = `/index.html?hospitalId=${encodeURIComponent(h.hospitalId)}&hospital=${encodeURIComponent(h.hospitalName)}`;
+        const hasHospMsg = h.hospitalMessageCount > 0;
+        const timeStr = last ? new Date(last.timestamp).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' }) : 'Aucun message';
+
+        return `
+          <div style="background: ${hasHospMsg ? '#eff6ff' : '#f8fafc'}; border: 1px solid ${hasHospMsg ? '#bfdbfe' : '#e2e8f0'}; border-radius: 12px; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; gap: 16px;">
+            <div style="flex: 1;">
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                <strong style="font-size: 0.95rem; color: #0f172a;">${h.hospitalName}</strong>
+                ${hasHospMsg ? `<span style="background: #dc2626; color: white; font-size: 0.7rem; font-weight: 800; padding: 2px 8px; border-radius: 12px;">${h.hospitalMessageCount} message(s)</span>` : ''}
+              </div>
+              <p style="font-size: 0.85rem; color: #475569; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 380px;">
+                ${last ? `<strong>${last.senderName}:</strong> "${last.text}"` : 'Pas de message récent'}
+              </p>
+              <span style="font-size: 0.75rem; color: var(--text-muted);">${timeStr}</span>
+            </div>
+            <a href="${targetUrl}" class="btn-access" style="padding: 8px 14px; font-size: 0.8rem; text-decoration: none; border-radius: 8px; white-space: nowrap;">
+              Ouvrir la discussion →
+            </a>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openAdminDiscussionModal() {
+      document.getElementById('adminDiscussionModal').style.display = 'flex';
+      fetchAdminDiscussions();
+    }
+
+    function closeAdminDiscussionModal() {
+      document.getElementById('adminDiscussionModal').style.display = 'none';
+    }
+
+    async function fetchHospitals() {
+      try {
+        const res = await fetch('/api/hospitals', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+
+        if (res.status === 401 || res.status === 403) {
+          logout();
+          return;
+        }
+
+        const data = await res.json();
+        allHospitals = data;
+        renderTable(allHospitals);
+      } catch (err) {
+        document.getElementById('hospitalsTableBody').innerHTML = `
+          <tr><td colspan="5" style="text-align:center; color: var(--danger); padding:40px;">
+            Erreur de communication serveur : ${err.message}
+          </td></tr>
+        `;
+      }
+    }
+
+    function renderTable(hospitals) {
+      const tbody = document.getElementById('hospitalsTableBody');
+      const tableCountLabel = document.getElementById('tableCountLabel');
+
+      if (!hospitals || hospitals.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:40px; color:var(--text-muted);">Aucun établissement trouvé.</td></tr>';
+        tableCountLabel.textContent = '0 établissement';
+        return;
+      }
+
+      document.getElementById('statTotal').textContent = hospitals.length;
+      const totalLevels = hospitals.reduce((acc, h) => acc + (parseInt(h.level) || 1), 0);
+      document.getElementById('statAvgLevel').textContent = (totalLevels / hospitals.length).toFixed(1) + " / 5";
+      tableCountLabel.textContent = hospitals.length + ' établissement(s)';
+
+      tbody.innerHTML = hospitals.map(h => {
+        const lvl = Math.min(5, Math.max(1, parseInt(h.level) || 1));
+        const city = h.city || 'National';
+        const type = h.type || 'Hôpital';
+        const daysLeft = h.daysRemaining !== undefined ? h.daysRemaining : 15;
+        const isExp = h.isExpired;
+
+        let deadlineBadge = `<span style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; padding: 4px 10px; border-radius: 20px; font-size: 0.775rem; font-weight: 700;">⏳ ${daysLeft} j restants</span>`;
+        if (isExp) {
+          deadlineBadge = `<span style="background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; padding: 4px 10px; border-radius: 20px; font-size: 0.775rem; font-weight: 700;">⚠️ Expiré (15j)</span>`;
+        } else if (daysLeft <= 3) {
+          deadlineBadge = `<span style="background: #fffbebf; color: #b45309; border: 1px solid #fde68a; padding: 4px 10px; border-radius: 20px; font-size: 0.775rem; font-weight: 700;">⚠️ URGENT : ${daysLeft} j</span>`;
+        }
+
+        const targetUrl = `/index.html?hospitalId=${encodeURIComponent(h.id)}&hospital=${encodeURIComponent(h.name)}`;
+
+        return `
+          <tr>
+            <td>
+              <div class="hosp-name">${h.name}</div>
+              <div class="hosp-meta">Code ID: <code>${h.id}</code></div>
+            </td>
+            <td>
+              <div><strong>${type}</strong></div>
+              <div class="hosp-meta">📍 ${city}</div>
+            </td>
+            <td>
+              ${deadlineBadge}
+            </td>
+            <td>
+              <span class="level-badge level-${lvl}">
+                Niveau ${lvl} / 5
+              </span>
+            </td>
+            <td style="text-align: right;">
+              <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
+                <a href="${targetUrl}&viewReport=1" class="btn-access" style="background:#1e3a8a; border-color:#1e3a8a; color:#ffffff;" title="Consulter et imprimer le rapport officiel d'accréditation">
+                  📑 Rapport Officiel
+                </a>
+                <a href="${targetUrl}" class="btn-access">
+                  Accéder à l'auto-évaluation →
+                </a>
+                <button
+                  onclick="deleteHospital('${h.id}', '${h.name.replace(/'/g, "\\'")}')"
+                  title="Supprimer cet établissement"
+                  style="background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; border-radius: 6px; padding: 4px 8px; font-size: 0.72rem; font-weight: 600; cursor: pointer; transition: all 0.2s; white-space: nowrap; line-height: 1.4;"
+                  onmouseover="this.style.background='#dc2626';this.style.color='#fff';"
+                  onmouseout="this.style.background='#fee2e2';this.style.color='#dc2626';"
+                >
+                  🗑️
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterTable() {
+      const query = document.getElementById('searchInput').value.toLowerCase().trim();
+      if (!query) {
+        renderTable(allHospitals);
+        return;
+      }
+
+      const filtered = allHospitals.filter(h =>
+        (h.name && h.name.toLowerCase().includes(query)) ||
+        (h.id && h.id.toLowerCase().includes(query)) ||
+        (h.city && h.city.toLowerCase().includes(query)) ||
+        (h.type && h.type.toLowerCase().includes(query))
+      );
+
+      renderTable(filtered);
+    }
+
+    async function deleteHospital(id, name) {
+      if (!confirm(`⚠️ Supprimer définitivement : « ${name} » ?\n\nCette action supprimera :\n• La fiche de l'établissement\n• Son compte d'accès (username/mot de passe)\n• Toutes ses évaluations enregistrées\n\nCette opération est irréversible.`)) return;
+
+      const token = localStorage.getItem('token');
+      try {
+        const res = await fetch('/api/hospitals/' + encodeURIComponent(id), {
+          method: 'DELETE',
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await res.json();
+        if (res.ok) {
+          const toast = document.createElement('div');
+          toast.textContent = '✅ ' + data.message;
+          toast.style.cssText = 'position:fixed;top:20px;right:20px;z-index:9999;background:#059669;color:#fff;padding:14px 22px;border-radius:10px;font-weight:700;font-size:0.9rem;box-shadow:0 4px 20px rgba(0,0,0,0.2);';
+          document.body.appendChild(toast);
+          setTimeout(() => toast.remove(), 3500);
+          fetchHospitals();
+        } else {
+          alert('❌ Erreur : ' + (data.error || 'Suppression échouée'));
+        }
+      } catch (e) {
+        alert('❌ Erreur réseau : ' + e.message);
+      }
+    }
+
+    function openAddModal() {
+      document.getElementById('addModal').style.display = 'flex';
+    }
+
+
+    function closeAddModal() {
+      document.getElementById('addModal').style.display = 'none';
+    }
+
+    document.getElementById('addHospitalForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('hospNameInput').value.trim();
+      const type = document.getElementById('hospTypeInput').value;
+      const city = document.getElementById('hospCityInput').value.trim();
+      const username = document.getElementById('hospUsernameInput').value.trim();
+      const password = document.getElementById('hospPasswordInput').value.trim();
+      const email = document.getElementById('hospEmailInput').value.trim();
+
+      const btn = document.getElementById('btnSaveHosp');
+      btn.disabled = true;
+      btn.textContent = 'Création du compte & Envoi e-mail...';
+
+      try {
+        const res = await fetch('/api/hospitals', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify({ name, type, city, username, password, email, level: 1 })
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Erreur lors de l\'enregistrement');
+
+        closeAddModal();
+        document.getElementById('addHospitalForm').reset();
+        fetchHospitals();
+
+        let emailMsg = data.emailSent
+          ? `✅ E-mail envoyé avec succès à l'adresse : ${data.email}`
+          : `ℹ️ Note E-mail : ${data.emailError || 'Compte créé avec succès. (Pour recevoir des e-mails Gmail réels, configurez votre Mot de Passe d\'Application Gmail dans les variables d\'environnement SMTP_PASS)'}`;
+
+        alert(`✉️ Établissement "${data.name}" enregistré avec succès !\n\n${emailMsg}\n\n🔑 Identifiant d'accès : ${data.username}\n🔑 Mot de passe initial : ${data.password}`);
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Valider & Envoyer par E-mail ✉️';
+      }
+    });
+
+    fetchHospitals();
+    fetchAdminDiscussions();
+    setInterval(fetchAdminDiscussions, 8000);
+  </script>
+</body>
+
+</html>

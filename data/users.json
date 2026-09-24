@@ -1,0 +1,113 @@
+[
+  {
+    "username": "admin",
+    "password": "adminpassword",
+    "role": "admin",
+    "name": "Administrateur INEAS",
+    "email": "admin@ineas.tn"
+  },
+  {
+    "username": "h1",
+    "password": "hospitalpass1",
+    "role": "hospital",
+    "hospitalId": "h1",
+    "name": "CHU Charles Nicolle",
+    "email": "contact@chu-charlesnicolle.tn"
+  },
+  {
+    "username": "h2",
+    "password": "hospitalpass2",
+    "role": "hospital",
+    "hospitalId": "h2",
+    "name": "CHU La Rabta",
+    "email": "contact@chu-rabta.tn"
+  },
+  {
+    "username": "h3",
+    "password": "hospitalpass3",
+    "role": "hospital",
+    "hospitalId": "h3",
+    "name": "Hôpital Militaire Principal d'Instruction de Tunis (HMPIT)",
+    "email": "contact@hmpit.defense.tn"
+  },
+  {
+    "username": "h4",
+    "password": "hospitalpass4",
+    "role": "hospital",
+    "hospitalId": "h4",
+    "name": "CHU Sahloul",
+    "email": "contact@chu-sahloul.tn"
+  },
+  {
+    "username": "h5",
+    "password": "hospitalpass5",
+    "role": "hospital",
+    "hospitalId": "h5",
+    "name": "CHU Farhat Hached",
+    "email": "contact@chu-hached.tn"
+  },
+  {
+    "username": "h6",
+    "password": "hospitalpass6",
+    "role": "hospital",
+    "hospitalId": "h6",
+    "name": "CHU Hédi Chaker",
+    "email": "contact@chu-hedichaker.tn"
+  },
+  {
+    "username": "h7",
+    "password": "hospitalpass7",
+    "role": "hospital",
+    "hospitalId": "h7",
+    "name": "CHU Habib Bourguiba",
+    "email": "contact@chu-bourguiba-sfax.tn"
+  },
+  {
+    "username": "h8",
+    "password": "hospitalpass8",
+    "role": "hospital",
+    "hospitalId": "h8",
+    "name": "CHU Fattouma Bourguiba",
+    "email": "contact@chu-monastir.tn"
+  },
+  {
+    "username": "h9",
+    "password": "hospitalpass9",
+    "role": "hospital",
+    "hospitalId": "h9",
+    "name": "Hôpital Régional Menzel Bourguiba",
+    "email": "contact@hr-bizerte.tn"
+  },
+  {
+    "username": "h10",
+    "password": "hospitalpass10",
+    "role": "hospital",
+    "hospitalId": "h10",
+    "name": "Hôpital Régional Mohamed Tlatli",
+    "email": "contact@hr-nabeul.tn"
+  },
+  {
+    "username": "h11",
+    "password": "hospitalpass11",
+    "role": "hospital",
+    "hospitalId": "h11",
+    "name": "CHU Taher Sfar",
+    "email": "contact@chu-mahdia.tn"
+  },
+  {
+    "username": "h12",
+    "password": "hospitalpass12",
+    "role": "hospital",
+    "hospitalId": "h12",
+    "name": "Clinique Taoufik",
+    "email": "contact@clinique-taoufik.tn"
+  },
+  {
+    "username": "h13",
+    "password": "hospitalpass13",
+    "role": "hospital",
+    "hospitalId": "h13",
+    "name": "Polyclinique Les Jasmins",
+    "email": "contact@lesjasmins.tn"
+  }
+]

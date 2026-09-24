@@ -1,0 +1,3238 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Auto-Évaluation AccrediX — Référentiel National GRI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --panel-bg: #ffffff;
+      --panel-raised: #f1f5f9;
+      --border: #e2e8f0;
+      --border-bright: #cbd5e1;
+      --primary: #1e3a8a;
+      --primary-hover: #1d4ed8;
+      --primary-light: #eff6ff;
+      --teal: #0d9488;
+      --teal-deep: #0f766e;
+      --clay: #dc2626;
+      --gold: #d97706;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --font-main: 'Plus Jakarta Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --shadow-card: 0 4px 14px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.02);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-main);
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .top-gov-bar {
+      background: #0f172a;
+      color: #cbd5e1;
+      padding: 8px 36px;
+      font-size: 0.775rem;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 3px solid #1e3a8a;
+    }
+
+    .app-header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      padding: 14px 36px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+      margin-bottom: 24px;
+    }
+
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-mark img {
+      height: 44px;
+      object-fit: contain;
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: -0.02em;
+    }
+
+    .nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .active-hosp-chip {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1e40af;
+      padding: 6px 16px;
+      border-radius: 30px;
+      font-size: 0.825rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-nav {
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+      color: #334155;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-nav:hover {
+      background: #e2e8f0;
+    }
+
+    .btn-logout-small {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+      width: 100%;
+    }
+
+    /* Hospital Selector */
+    .hospital-selector {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      padding: 32px;
+      margin-top: 24px;
+      border-radius: 16px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .hospital-selector h2 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .hospital-selector p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .hospital-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .hospital-card {
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      padding: 16px;
+      cursor: pointer;
+      border-radius: 12px;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hospital-card:hover {
+      border-color: var(--primary);
+      background: #eff6ff;
+    }
+
+    .hospital-card.active {
+      border-color: var(--primary);
+      background: #dbeafe;
+    }
+
+    .hospital-card .h-name {
+      font-weight: 700;
+      font-size: 0.925rem;
+      color: #0f172a;
+    }
+
+    .add-hospital-bar {
+      display: flex;
+      gap: 12px;
+    }
+
+    .add-hospital-bar input {
+      flex: 1;
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 22px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.875rem;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(30, 58, 138, 0.2);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-ghost {
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+      color: #334155;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+
+    .btn-clay {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+
+    /* Dashboard Metrics Cards */
+    .dashboard {
+      margin-bottom: 24px;
+    }
+
+    .dash-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+    }
+
+    .dash-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--shadow-card);
+      border-left: 4px solid var(--primary);
+    }
+
+    .dash-card .k {
+      font-size: 0.775rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+    }
+
+    .dash-card .v {
+      font-size: 2rem;
+      font-weight: 800;
+      margin: 8px 0 4px;
+      color: #0f172a;
+    }
+
+    .dash-card .v .total {
+      font-size: 1rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .dash-card .sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Document Header */
+    .doc-header {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .doc-header .kicker {
+      font-size: 0.775rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .doc-header h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+    }
+
+    .meta-row {
+      display: flex;
+      gap: 32px;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .meta-item .k {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .meta-item .v {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-top: 2px;
+    }
+
+    /* Section Step styling */
+    .section {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .section-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.875rem;
+    }
+
+    .section-head h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .section-desc {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    /* Ref Tabs Bar */
+    .ref-tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 18px;
+    }
+
+    .ref-tab {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      padding: 10px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      color: #334155;
+      transition: all 0.15s ease;
+    }
+
+    .ref-tab:hover {
+      border-color: var(--primary);
+      background: #eff6ff;
+    }
+
+    .ref-tab.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: transparent;
+    }
+
+    .ref-tab .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #94a3b8;
+    }
+
+    .ref-tab .dot.done {
+      background: #16a34a;
+    }
+
+    .ref-tab.active .dot.done {
+      background: #4ade80;
+    }
+
+    .ref-detail {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      padding: 18px;
+      border-radius: 12px;
+    }
+
+    .ref-detail .ref-code {
+      font-weight: 800;
+      color: var(--primary);
+      font-size: 1rem;
+    }
+
+    .ref-detail .crit-count {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Document upload grid */
+    .upload-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .upload-card {
+      border: 1px dashed #cbd5e1;
+      background: #f8fafc;
+      padding: 18px;
+      border-radius: 12px;
+    }
+
+    .upload-card .label {
+      font-weight: 700;
+      font-size: 0.875rem;
+      margin-bottom: 6px;
+      display: block;
+      color: #0f172a;
+    }
+
+    .upload-card .status {
+      font-size: 0.785rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .upload-card input[type="file"] {
+      display: none;
+    }
+
+    .btn-file {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: #1e293b;
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .action-bar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    /* ── Grille d'évaluation — tableau ── */
+    .eval-table-wrap {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    }
+
+    .eval-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+
+    .eval-table thead tr {
+      background: #0f172a;
+      color: #e2e8f0;
+      text-transform: uppercase;
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      font-weight: 700;
+    }
+
+    .eval-table thead th {
+      padding: 13px 16px;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .eval-table tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.1s;
+    }
+
+    .eval-table tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    .eval-table tbody tr:nth-child(even) {
+      background: #f8fafc;
+    }
+
+    .eval-table tbody tr:hover {
+      background: #eff6ff;
+    }
+
+    .eval-table td {
+      padding: 14px 16px;
+      vertical-align: top;
+    }
+
+    .td-id {
+      white-space: nowrap;
+      font-weight: 800;
+      color: var(--primary);
+      font-size: 0.85rem;
+      font-family: var(--font-mono);
+      min-width: 80px;
+    }
+
+    .td-critere {
+      min-width: 260px;
+      max-width: 380px;
+    }
+
+    .td-critere .crit-text {
+      font-weight: 600;
+      color: #0f172a;
+      line-height: 1.5;
+      margin-bottom: 4px;
+      white-space: normal;
+      overflow-wrap: break-word;
+      word-break: normal;
+    }
+
+    .td-docs {
+      min-width: 240px;
+      max-width: 340px;
+    }
+
+    .doc-badge-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: stretch;
+      width: 100%;
+    }
+
+    .doc-badge {
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.76rem;
+      font-weight: 500;
+      line-height: 1.45;
+      white-space: normal;
+      overflow-wrap: break-word;
+      word-break: normal;
+      box-sizing: border-box;
+      width: 100%;
+    }
+
+    .doc-badge-icon {
+      flex-shrink: 0;
+      font-size: 0.82rem;
+      line-height: 1.45;
+    }
+
+    .doc-badge-text {
+      flex: 1;
+      line-height: 1.45;
+      white-space: normal;
+      overflow-wrap: break-word;
+      word-break: normal;
+    }
+
+    .doc-badge.present {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+
+    .doc-badge.absent {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #e2e8f0;
+    }
+
+    .td-cotation {
+      min-width: 130px;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .cot-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      border: 1.5px solid transparent;
+      white-space: nowrap;
+    }
+
+    .cot-badge.oui {
+      background: #d1fae5;
+      color: #065f46;
+      border-color: #16a34a;
+    }
+
+    .cot-badge.partiel {
+      background: #fef3c7;
+      color: #92400e;
+      border-color: #d97706;
+    }
+
+    .cot-badge.non {
+      background: #fee2e2;
+      color: #991b1b;
+      border-color: #dc2626;
+    }
+
+    .cot-badge.empty {
+      background: #f1f5f9;
+      color: #94a3b8;
+      border-color: #e2e8f0;
+      font-style: italic;
+    }
+
+    .td-preuve {
+      min-width: 220px;
+    }
+
+    .td-preuve textarea {
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: #0f172a;
+      padding: 8px 12px;
+      font-size: 0.8rem;
+      resize: vertical;
+      min-height: 58px;
+      outline: none;
+      font-family: var(--font-main);
+      transition: border-color 0.15s;
+    }
+
+    .td-preuve textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+    }
+
+    .row-status-bar {
+      width: 4px;
+      min-width: 4px;
+      padding: 0;
+    }
+
+    .row-status-oui {
+      background: #16a34a;
+    }
+
+    .row-status-partiel {
+      background: #d97706;
+    }
+
+    .row-status-non {
+      background: #dc2626;
+    }
+
+    .row-status-empty {
+      background: #e2e8f0;
+    }
+
+    /* Synthese Box */
+    .synthese-box {
+      background: #f0fdf4;
+      border-left: 4px solid #16a34a;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      font-size: 0.925rem;
+      line-height: 1.6;
+      color: #14532d;
+    }
+
+    .synthese-box .label {
+      font-weight: 800;
+      color: #16a34a;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    .disclaimer {
+      font-size: 0.785rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* Global Report Table */
+    .report-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 24px;
+    }
+
+    .report-row {
+      display: grid;
+      grid-template-columns: 80px 1fr 60px 60px 60px 140px;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.875rem;
+    }
+
+    .report-row.head {
+      font-weight: 700;
+      color: #334155;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      background: #f1f5f9;
+    }
+
+    .bar-bg {
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 4px;
+    }
+
+    .bar-fill.oui {
+      background: #16a34a;
+    }
+
+    .bar-fill.partiel {
+      background: #d97706;
+    }
+
+    .bar-fill.non {
+      background: #dc2626;
+    }
+
+    footer {
+      background: #ffffff;
+      border-top: 1px solid #e2e8f0;
+      text-align: center;
+      padding: 20px;
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+
+    /* ══════════════════════════════════════════════════════════════════
+       RAPPORT OFFICIEL ACCREDIX / AccrediX — MODAL ET STYLES D'IMPRESSION
+       ══════════════════════════════════════════════════════════════════ */
+    .report-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(6px);
+      z-index: 99999;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      overflow-y: auto;
+      padding: 30px 16px;
+    }
+
+    .report-modal-dialog {
+      width: 100%;
+      max-width: 960px;
+      position: relative;
+      margin: auto;
+    }
+
+    .report-toolbar {
+      background: #0f172a;
+      color: #ffffff;
+      padding: 14px 24px;
+      border-radius: 14px 14px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .report-toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .report-toolbar-badge {
+      background: #1e3a8a;
+      color: #93c5fd;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border: 1px solid #2563eb;
+    }
+
+    .report-toolbar-sub {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+
+    .report-toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-report-action {
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-report-action.print-btn {
+      background: #2563eb;
+      color: #ffffff;
+    }
+
+    .btn-report-action.print-btn:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-report-action.close-btn {
+      background: #334155;
+      color: #cbd5e1;
+    }
+
+    .btn-report-action.close-btn:hover {
+      background: #475569;
+      color: #ffffff;
+    }
+
+    /* Le document papier */
+    .official-paper {
+      background: #ffffff;
+      color: #0f172a;
+      padding: 48px 56px;
+      border-radius: 0 0 14px 14px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+      font-family: 'Plus Jakarta Sans', Arial, sans-serif;
+      line-height: 1.5;
+    }
+
+    /* En-tête ministériel */
+    .gov-letterhead {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .gov-text-left {
+      flex: 1;
+    }
+
+    .gov-text-left .rep-title {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: 0.05em;
+    }
+
+    .gov-text-left .min-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #475569;
+      margin-top: 2px;
+    }
+
+    .gov-text-left .inst-title {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #1e3a8a;
+      margin-top: 4px;
+    }
+
+    .gov-text-left .dep-title {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #64748b;
+    }
+
+    .gov-logo-center {
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    .gov-logo-center .report-logo {
+      height: 70px;
+      max-width: 180px;
+      object-fit: contain;
+    }
+
+    .gov-meta-right {
+      text-align: right;
+      font-size: 0.75rem;
+      color: #475569;
+    }
+
+    .gov-meta-right .meta-code {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      color: #1e3a8a;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      padding: 3px 8px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 4px;
+    }
+
+    .gov-meta-right .meta-date {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .gov-meta-right .meta-badge {
+      display: inline-block;
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.7rem;
+    }
+
+    .report-divider-gov {
+      border-top: 3px solid #1e3a8a;
+      border-bottom: 1px solid #94a3b8;
+      height: 3px;
+      margin: 16px 0 24px;
+    }
+
+    /* Titre du rapport */
+    .report-header-title {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .report-header-title h1 {
+      font-size: 1.55rem;
+      font-weight: 900;
+      color: #0f172a;
+      letter-spacing: -0.01em;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .report-header-title h2 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #1e3a8a;
+      margin-bottom: 6px;
+    }
+
+    .report-header-title .report-subtitle {
+      font-size: 0.85rem;
+      color: #64748b;
+      font-style: italic;
+    }
+
+    /* Blocs de contenu */
+    .report-block {
+      margin-bottom: 28px;
+    }
+
+    .block-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 6px;
+      margin-bottom: 14px;
+    }
+
+    .block-title .block-num {
+      background: #1e3a8a;
+      color: #ffffff;
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .block-title h3 {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    /* Fiche d'identification */
+    .report-id-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .report-id-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .report-id-table .id-label {
+      font-weight: 700;
+      color: #475569;
+      width: 20%;
+      background: #f1f5f9;
+      border-right: 1px solid #e2e8f0;
+    }
+
+    .report-id-table .id-val {
+      color: #0f172a;
+      width: 30%;
+    }
+
+    /* Cartouches KPI */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .kpi-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+      border-top: 4px solid #1e3a8a;
+    }
+
+    .kpi-card .kpi-label {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #64748b;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .kpi-card .kpi-val {
+      font-size: 1.85rem;
+      font-weight: 900;
+      color: #1e3a8a;
+      line-height: 1.2;
+    }
+
+    .kpi-card .kpi-val.level-val {
+      color: #0f766e;
+    }
+
+    .kpi-card .kpi-sub {
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-top: 4px;
+      font-weight: 600;
+    }
+
+    /* Tableau des 9 Références */
+    .report-data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+    }
+
+    .report-data-table th {
+      background: #f1f5f9;
+      color: #334155;
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 0.72rem;
+      letter-spacing: 0.03em;
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      text-align: center;
+    }
+
+    .report-data-table th.th-left {
+      text-align: left;
+    }
+
+    .report-data-table td {
+      padding: 9px 12px;
+      border: 1px solid #e2e8f0;
+      text-align: center;
+      color: #334155;
+    }
+
+    .report-data-table td.td-left {
+      text-align: left;
+    }
+
+    .report-data-table tr:nth-child(even) {
+      background: #f8fafc;
+    }
+
+    .report-data-table .ref-badge {
+      font-weight: 800;
+      color: #1e3a8a;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .report-data-table .badge-oui {
+      color: #166534;
+      font-weight: 700;
+    }
+
+    .report-data-table .badge-partiel {
+      color: #b45309;
+      font-weight: 700;
+    }
+
+    .report-data-table .badge-non {
+      color: #991b1b;
+      font-weight: 700;
+    }
+
+    .status-pill {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .status-pill.pill-green {
+      background: #dcfce7;
+      color: #15803d;
+      border: 1px solid #86efac;
+    }
+
+    .status-pill.pill-amber {
+      background: #fef3c7;
+      color: #b45309;
+      border: 1px solid #fde68a;
+    }
+
+    .status-pill.pill-red {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #fca5a5;
+    }
+
+    .status-pill.pill-gray {
+      background: #f1f5f9;
+      color: #64748b;
+      border: 1px solid #cbd5e1;
+    }
+
+    /* Cartes détaillées par référence */
+    .report-detailed-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 14px;
+      border-left: 4px solid #1e3a8a;
+    }
+
+    .report-detailed-card .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .report-detailed-card .card-title {
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: #1e3a8a;
+    }
+
+    .report-detailed-card .card-score {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #475569;
+      background: #f1f5f9;
+      padding: 3px 10px;
+      border-radius: 12px;
+    }
+
+    .report-detailed-card .card-body {
+      font-size: 0.85rem;
+      color: #334155;
+      line-height: 1.6;
+    }
+
+    .report-detailed-card .card-proofs {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px dashed #e2e8f0;
+      font-size: 0.78rem;
+      color: #64748b;
+    }
+
+    /* Analyse Stratégique & IA */
+    .report-strategic-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 22px 26px;
+      font-size: 0.875rem;
+      line-height: 1.7;
+      color: #1e293b;
+    }
+
+    .report-strategic-box h3 {
+      color: #1e3a8a;
+      margin-top: 16px;
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+
+    .report-strategic-box ul {
+      margin: 8px 0 14px 22px;
+    }
+
+    .report-strategic-box li {
+      margin-bottom: 4px;
+    }
+
+    /* Conclusions & Recommandations */
+    .conclusions-container {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 10px;
+      padding: 22px 26px;
+      font-size: 0.875rem;
+      line-height: 1.65;
+      color: #14532d;
+    }
+
+    .conclusions-container h4 {
+      color: #166534;
+      font-size: 0.95rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .conclusions-list {
+      margin: 10px 0 16px 20px;
+    }
+
+    .conclusions-list li {
+      margin-bottom: 6px;
+      color: #166534;
+    }
+
+    .conclusions-notice {
+      background: #ffffff;
+      border-left: 4px solid #16a34a;
+      padding: 12px 16px;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.82rem;
+      color: #334155;
+      margin-top: 14px;
+    }
+
+    /* Blocs de signatures */
+    .signatures-note {
+      font-size: 0.8rem;
+      color: #64748b;
+      font-style: italic;
+      margin-bottom: 16px;
+    }
+
+    .signatures-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .sig-box {
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 18px 20px;
+      min-height: 170px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .sig-box .sig-title {
+      font-weight: 800;
+      font-size: 0.85rem;
+      color: #0f172a;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .sig-box .sig-role {
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    .sig-box .sig-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #1e3a8a;
+      margin-top: 6px;
+    }
+
+    .sig-box .sig-field {
+      font-size: 0.75rem;
+      color: #475569;
+      font-weight: 600;
+      margin-top: 12px;
+    }
+
+    .sig-box .sig-line {
+      border-bottom: 1px dashed #94a3b8;
+      height: 28px;
+      margin-bottom: 6px;
+    }
+
+    .sig-box .sig-stamp {
+      font-size: 0.7rem;
+      color: #94a3b8;
+      font-style: italic;
+      text-align: right;
+    }
+
+    /* Pied de page document */
+    .gov-footer {
+      margin-top: 36px;
+    }
+
+    .gov-footer .footer-line {
+      border-top: 1px solid #cbd5e1;
+      margin-bottom: 8px;
+    }
+
+    .gov-footer .footer-content {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      color: #64748b;
+    }
+
+    /* ══════════════════════════════════════════════════════════════════
+       RÈGLES D'IMPRESSION HAUTE DÉFINITION (PRINT / PDF EXPORT)
+       ══════════════════════════════════════════════════════════════════ */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 12mm 15mm 12mm 15mm;
+      }
+
+      html,
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        font-size: 10pt !important;
+        line-height: 1.4 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      /* Masquer absolument TOUS les éléments d'interface web standard */
+      body>*:not(#officialReportModal) {
+        display: none !important;
+      }
+
+      #officialReportModal {
+        display: block !important;
+        position: static !important;
+        background: transparent !important;
+        backdrop-filter: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
+
+      .report-modal-dialog {
+        max-width: 100% !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        background: transparent !important;
+      }
+
+      .report-toolbar,
+      .no-print {
+        display: none !important;
+      }
+
+      .official-paper {
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+      }
+
+      .page-break-before {
+        page-break-before: always !important;
+        break-before: page !important;
+      }
+
+      .avoid-break {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
+      table {
+        page-break-inside: auto !important;
+      }
+
+      tr {
+        page-break-inside: avoid !important;
+        page-break-after: auto !important;
+      }
+
+      thead {
+        display: table-header-group !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="top-gov-bar">
+    <div>AccrediX — Système National d'Accréditation des Établissements de Santé
+    </div>
+    <div>Référentiel Officiel de Gestion des Risques Infectieux (GRI) 🏥</div>
+  </div>
+
+  <header class="app-header">
+    <div class="brand-mark">
+      <img src="assets/logo_AccrediX.png" alt="AccrediX" onerror="this.style.display='none'">
+      <div class="brand-title">AccrediX Auto-Évaluation</div>
+    </div>
+
+    <div class="nav-controls">
+      <div class="active-hosp-chip" id="headerHospitalChip">
+        <span>📍</span>
+        <span id="headerHospitalName">Chargement...</span>
+      </div>
+
+      <button class="btn-nav" id="btnHeaderDiscussion" onclick="scrollToDiscussion()"
+        style="display: flex; align-items: center; gap: 6px; cursor: pointer; background: #eff6ff; color: #1e40af; border-color: #bfdbfe;">
+        💬 Discussion
+      </button>
+
+      <button class="btn-nav" id="topViewReportBtn" onclick="openOfficialReportModal()"
+        style="display: flex; align-items: center; gap: 6px; cursor: pointer; background: #1e3a8a; color: #ffffff; border-color: #1e3a8a; font-weight: 700;">
+        📑 Rapport Officiel
+      </button>
+
+      <a id="navPortalBtn" href="/login.html" class="btn-nav" style="display:none;">
+        🔒 Espace Connexion
+      </a>
+
+      <button class="btn-logout-small" onclick="logoutSession()">Déconnexion</button>
+    </div>
+  </header>
+
+  <div class="wrap">
+
+    <!-- Bandeau Mode Consultation Admin (Lecture Seule) -->
+    <div id="adminReadOnlyBanner"
+      style="display:none; background: #fffbebf; border: 1px solid #fde68a; color: #92400e; border-radius: 12px; padding: 14px 20px; margin-bottom: 20px; align-items: center; justify-content: space-between; font-weight: 700; box-shadow: var(--shadow-card);">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <span style="font-size: 1.4rem;">🛡️</span>
+        <div>
+          <span style="font-size: 0.95rem; color: #78350f;">MODE CONSULTATION — Lecture Seule (Administrateur)</span>
+          <p style="font-size: 0.825rem; color: #b45309; font-weight: 500; margin-top: 2px;">Vous consultez le dossier
+            d'évaluation de cet établissement. Toutes les modifications de données sont désactivées.</p>
+        </div>
+      </div>
+      <span
+        style="background: #b45309; color: white; padding: 6px 14px; border-radius: 20px; font-size: 0.775rem; text-transform: uppercase; letter-spacing: 0.05em;">Consultation
+        Uniquement</span>
+    </div>
+
+    <!-- Bandeau Délai 15 Jours -->
+    <div id="evalDeadlineBanner"
+      style="display:none; background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; border-radius: 12px; padding: 14px 20px; margin-bottom: 20px; align-items: center; justify-content: space-between; font-size: 0.875rem;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 1.25rem;">⏱️</span>
+        <div>
+          <strong style="color: #1e3a8a;">Délai Officiel d'Auto-Évaluation (15 Jours Max) :</strong>
+          <span id="evalDeadlineDays" style="margin-left: 6px; color: #2563eb;">Calcul en cours...</span>
+        </div>
+      </div>
+      <span id="evalDeadlineStatusBadge"
+        style="background: #1e40af; color: white; padding: 4px 14px; border-radius: 20px; font-weight: 700; font-size: 0.8rem;">-</span>
+    </div>
+
+    <div id="fileProtocolWarning"
+      style="display:none; margin-bottom:20px; padding:16px 20px; border:1px solid #fecaca; background:#fef2f2; border-radius:10px; font-size:13px;">
+      <strong style="color:#991b1b; display:block; margin-bottom:4px;">⚠️ Page ouverte sans serveur local
+        (file://)</strong>
+      Veuillez démarrer <strong><code>run.bat</code></strong> puis ouvrir <a href="http://localhost:3001"
+        style="color:#1e3a8a; font-weight:700;">http://localhost:3001</a> pour accéder à la plateforme d'évaluation.
+    </div>
+
+    <div class="hospital-selector" id="hospitalSelector" style="display:none;">
+      <h2>🏥 Choisir un établissement</h2>
+      <p>Sélectionnez un établissement enregistré pour ouvrir sa grille d'auto-évaluation.</p>
+      <div class="hospital-grid" id="hospitalGrid"></div>
+      <div class="add-hospital-bar">
+        <input type="text" id="newHospitalInput" placeholder="Nom du nouvel établissement…">
+        <button class="btn-primary" id="addHospitalBtn">Ajouter</button>
+      </div>
+    </div>
+
+    <!-- Dashboard overview -->
+    <div class="dashboard" id="dashboard">
+      <div class="dash-grid">
+        <div class="dash-card">
+          <p class="k">Références Évaluées</p>
+          <p class="v" id="dashEvaluated">0 <span class="total">/ 9</span></p>
+          <p class="sub" id="dashEvaluatedSub">Aucune référence analysée</p>
+        </div>
+        <div class="dash-card">
+          <p class="k">Critères Conformes (Oui)</p>
+          <p class="v" id="dashCovered">0 <span class="total">/ 44</span></p>
+          <p class="sub" id="dashCoveredSub">0% de réalisation</p>
+        </div>
+        <div class="dash-card">
+          <p class="k">Taux Global d'Accréditation</p>
+          <p class="v" id="dashRate" style="color: var(--primary);">0%</p>
+          <p class="sub" id="dashRateSub">Niveau initial</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="doc-header" id="docHeader">
+      <p class="kicker">Référentiel Officiel d'Accréditation </p>
+      <h1 id="mainTitle">GRI — Gestion du Risque Infectieux</h1>
+      <div class="meta-row">
+        <div class="meta-item">
+          <p class="k">Domaine d'Accréditation</p>
+          <p class="v">GRI (9 Références)</p>
+        </div>
+        <div class="meta-item">
+          <p class="k">Référence en cours</p>
+          <p class="v" id="refCodeLabel">GRI 1</p>
+        </div>
+        <div class="meta-item">
+          <p class="k">Avancement Global</p>
+          <p class="v" id="statusLabel">0 / 9 Références</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" id="section1">
+      <div class="section-head">
+        <span class="section-num">1</span>
+        <h2>Sélectionner une Référence à évaluer</h2>
+      </div>
+      <p class="section-desc">Choisissez la référence GRI pour saisir la cotation et téléverser les documents
+        justificatifs.</p>
+      <div class="ref-tabs" id="refTabs"></div>
+      <div class="ref-detail" id="refDetail"></div>
+    </div>
+
+    <div class="section" id="section2">
+      <div class="section-head">
+        <span class="section-num">2</span>
+        <h2>Documents Ressources & Preuves Requis</h2>
+      </div>
+      <p class="section-desc">Déposez les pièces justificatives demandées. Les pièces mutualisées sont associées
+        automatiquement.</p>
+      <div class="upload-grid" id="uploadGrid"></div>
+      <div class="action-bar">
+        <button class="btn-primary" id="analyzeBtn">📋 Procéder à l'Évaluation Experte des Critères</button>
+        <span id="progressNote" style="font-size: 0.85rem; color: var(--text-muted);"></span>
+      </div>
+      <div id="critResultZone" style="margin-top: 16px;"></div>
+    </div>
+
+    <div class="section" id="section3">
+      <div class="section-head">
+        <span class="section-num">3</span>
+        <h2>Grille Officielle d'Auto-Évaluation — <span id="tableRefLabel" style="color:var(--primary);">GRI 1</span>
+        </h2>
+      </div>
+      <p class="section-desc">Indiquez l'existant pour chaque critère et documentez les éléments de preuve officiels.
+      </p>
+      <div id="overviewZone"></div>
+    </div>
+
+    <div class="section" id="syntheseSection" style="display:none;">
+      <div class="section-head">
+        <span class="section-num">4</span>
+        <h2>Synthèse Officielle de Référence — <span id="syntheseRefLabel" style="color:var(--primary);">GRI 1</span>
+        </h2>
+      </div>
+      <div class="synthese-box">
+        <p class="label">Rapport de Synthèse d'Audit — Commission d'Évaluation & Qualité</p>
+        <p id="syntheseText"></p>
+      </div>
+      <div class="disclaimer">
+        <strong>Remarque institutionnelle :</strong> Les rapports indicatifs doivent être validés par la commission
+        qualité de l'établissement.
+      </div>
+    </div>
+    <div class="action-bar" id="syntheseAction" style="margin-bottom: 24px;">
+      <button class="btn-ghost" id="syntheseBtn">✨ Générer la Synthèse de la référence</button>
+    </div>
+
+    <div class="section" id="reportSection">
+      <div class="section-head">
+        <span class="section-num">5</span>
+        <h2>Rapport Synthétique d'Accréditation Global</h2>
+      </div>
+      <p class="section-desc">Vue d'ensemble de l'évaluation globale de l'établissement sur l'ensemble des 9 références
+        GRI.</p>
+      <div class="report-table" id="reportTable"></div>
+
+      <div class="synthese-box" id="finalReportBox" style="display:none;">
+        <p class="label">Rapport Global d'Accréditation — Direction de l'Évaluation AccrediX</p>
+        <p id="finalReportText"></p>
+      </div>
+
+      <div class="action-bar" style="margin-top: 24px; flex-wrap: wrap;">
+        <button class="btn-ghost" id="generateFinalReportBtn" style="display:inline-flex; align-items:center; gap:8px;">
+          ✨ Établir l'Analyse Globale IA
+        </button>
+        <button class="btn-primary" id="openReportModalBtn" onclick="openOfficialReportModal()"
+          style="display:inline-flex; align-items:center; gap:8px;">
+          📑 Consulter le Rapport Officiel Complet
+        </button>
+        <button class="btn-ghost" id="printSelectedRefBtn" style="display:inline-flex; align-items:center; gap:8px;">
+          🖨️ Imprimer / Exporter en PDF (A4)
+        </button>
+
+        <button class="btn-clay" id="resetAllBtn">⚠️ Réinitialiser l'Évaluation</button>
+      </div>
+    </div>
+
+    <!-- Panel de Discussion AccrediX ↔ Établissement -->
+    <div
+      style="background: var(--panel-bg); border: 1px solid var(--border); border-radius: 16px; padding: 28px; margin-top: 32px; box-shadow: var(--shadow-card);"
+      id="discussionPanel">
+      <div
+        style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 20px;">
+        <div>
+          <h2
+            style="font-size: 1.2rem; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 8px;">
+            💬 Espace de Discussion Officiel AccrediX ↔ Établissement
+          </h2>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Canal d'échange direct entre la
+            direction de l'hôpital et AccrediX.</p>
+        </div>
+        <button onclick="fetchDiscussions()"
+          style="background: #f1f5f9; border: 1px solid var(--border); color: #334155; padding: 8px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer;">🔄
+          Actualiser</button>
+      </div>
+
+      <!-- Messages Container -->
+      <div id="discussionMessages"
+        style="max-height: 350px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; padding-right: 8px; margin-bottom: 20px;">
+        <div style="text-align: center; color: var(--text-muted); font-size: 0.875rem; padding: 20px;">Chargement de la
+          discussion...</div>
+      </div>
+
+      <!-- Message Input Form -->
+      <div style="display: flex; gap: 12px;" id="discussionFormRow">
+        <input type="text" id="discussionInput" placeholder="Saisissez votre message ou demande de clarification..."
+          style="flex: 1; padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border); font-size: 0.9rem; outline: none;">
+        <button id="sendDiscussionBtn" onclick="sendDiscussionMessage()"
+          style="background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 700; font-size: 0.875rem; cursor: pointer;">Envoyer
+          →</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       MODAL ET CONTENEUR D'IMPRESSION DU RAPPORT OFFICIEL AccrediX
+       ══════════════════════════════════════════════════════════════════ -->
+  <div id="officialReportModal" class="report-modal-overlay" style="display:none;"
+    onclick="if(event.target===this) closeOfficialReport()">
+    <div class="report-modal-dialog">
+      <!-- Barre d'outils supérieure (Non imprimée) -->
+      <div class="report-toolbar no-print">
+        <div class="report-toolbar-left">
+          <span class="report-toolbar-badge">📑 Document Officiel AccrediX</span>
+          <span class="report-toolbar-sub" id="reportToolbarHospital">Établissement</span>
+        </div>
+        <div class="report-toolbar-actions">
+          <button class="btn-report-action print-btn" onclick="printOfficialReport()">🖨️ Imprimer / Exporter en PDF
+            (A4)</button>
+          <button class="btn-report-action close-btn" onclick="closeOfficialReport()">✕ Fermer</button>
+        </div>
+      </div>
+
+      <!-- Document Papier Officiel Format A4 -->
+      <div id="printableOfficialReport" class="official-paper">
+        <!-- Rempli dynamiquement par buildOfficialReport() -->
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    AccrediX © 2026 — Tous droits réservés.
+  </footer>
+
+  <script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+    const GRI_DATA = {
+      "GRI 1": {
+        title: "Un dispositif de gestion du risque infectieux est en place",
+        criteria: [
+          { id: "GRI 1a", text: "L'établissement définit et met en oeuvre une politique de gestion des risques infectieux dans le cadre du projet de l'établissement", docs: ["Projet d'etablissement/Business plan", "Reglement interieur", "Manuel de procedures de gestion du risque infectieux", "Plan de formation"] },
+          { id: "GRI 1b", text: "Un comite de lutte et de prevention des infections associees aux soins (CLPIAS) ou equivalent est en place", docs: ["Proces-verbaux", "Rapports d'activite de l'EOHH", "Fiches de poste / de fonction"] },
+          { id: "GRI 1c", text: "Une equipe operationnelle d'hygiene hospitaliere (EOHH) ou equivalent est en place pour coordonner la mise en oeuvre de la politique", docs: ["Rapports d'activite de l'EOHH", "Fiches de poste / de fonction"] },
+          { id: "GRI 1d", text: "Un professionnel est identifie au sein de chaque service pour assurer la fonction de referent gestion du risque infectieux", docs: ["Fiches de poste / de fonction", "Plan de formation"] },
+          { id: "GRI 1e", text: "La gestion du risque infectieux est decrite par des procedures specifiques ecrites, verifiees, approuvees, regulierement mises a jour et diffusees", docs: ["Manuel de procedures de gestion du risque infectieux"] },
+          { id: "GRI 1f", text: "Les zones a risque de contamination pour le patient sont identifiees et classees en fonction du niveau de risque", docs: ["Manuel de procedures de gestion du risque infectieux"] }
+        ]
+      },
+      "GRI 2": {
+        title: "Un systeme structure de surveillance des infections associees aux soins est en place",
+        criteria: [
+          { id: "GRI 2a", text: "Le systeme de surveillance des infections associees aux soins est decrit dans une procedure", docs: ["Procedure de surveillance des IAS"] },
+          { id: "GRI 2b", text: "Les professionnels impliques dans la surveillance sont formes", docs: ["Plan de formation", "Feuilles de presence aux formations"] },
+          { id: "GRI 2c", text: "Des donnees de surveillance utiles et utilisables sont disponibles au niveau de l'etablissement", docs: ["Rapports d'activite de l'EOHH"] },
+          { id: "GRI 2d", text: "Les donnees de surveillance sont utilisees pour orienter et mieux cibler ou evaluer les mesures de prevention", docs: ["Plans d'action", "Tableaux de bord"] }
+        ]
+      },
+      "GRI 3": {
+        title: "La formation et la sensibilisation des professionnels aux bonnes pratiques d'hygiene hospitaliere sont assurees",
+        criteria: [
+          { id: "GRI 3a", text: "La politique de gestion du risque infectieux prevoit un plan de formation et de sensibilisation du personnel", docs: ["Plan de formation", "Plan de communication"] },
+          { id: "GRI 3b", text: "La politique de gestion du risque infectieux prevoit un plan de communication destine aux usagers", docs: ["Plan de communication"] },
+          { id: "GRI 3c", text: "Une formation aux bonnes pratiques est proposee et assuree au profit de tous les professionnels nouvellement recrutes", docs: ["Feuilles de presence aux formations", "Dossiers du personnel"] },
+          { id: "GRI 3d", text: "La tracabilite des actions de formation realisees est assuree", docs: ["Feuilles de presence aux formations", "Dossiers du personnel"] },
+          { id: "GRI 3e", text: "L'etablissement procede systematiquement a l'evaluation de toute campagne de sensibilisation realisee", docs: ["Rapports d'evaluation des campagnes de sensibilisation", "Questionnaire de satisfaction"] }
+        ]
+      },
+      "GRI 4": {
+        title: "Une strategie de promotion de l'hygiene des mains est formalisee et mise en oeuvre",
+        criteria: [
+          { id: "GRI 4a", text: "Les materiels, equipements et consommables necessaires a l'hygiene des mains sont disponibles", docs: ["Rapports d'evaluation"] },
+          { id: "GRI 4b", text: "Des procedures specifiques a l'hygiene des mains sont elaborees et mises en oeuvre", docs: ["Manuel de procedures de gestion du risque infectieux"] },
+          { id: "GRI 4c", text: "Une formation a l'hygiene des mains est assuree au profit de tout le personnel", docs: ["Plan de formation", "Feuilles de presence aux formations"] },
+          { id: "GRI 4d", text: "Une communication specifique a l'hygiene des mains est organisee en faveur des usagers et des professionnels", docs: ["Plan de communication", "Outils et supports de sensibilisation"] },
+          { id: "GRI 4e", text: "Des evaluations periodiques des pratiques et ressources d'hygiene des mains sont menees", docs: ["Protocole d'evaluation", "Rapports d'evaluation"] }
+        ]
+      },
+      "GRI 5": {
+        title: "L'etablissement elabore un programme de lutte contre la resistance microbienne et du bon usage des antimicrobiens",
+        criteria: [
+          { id: "GRI 5a", text: "Une organisation est mise en place pour assurer le bon usage des antimicrobiens", docs: ["Programme de lutte contre la resistance antimicrobienne", "Reglement interieur"] },
+          { id: "GRI 5b", text: "Des outils d'aide a la prescription antibiotique sont disponibles", docs: ["Guide de bon usage des antibiotiques", "Protocoles de prescription des antibiotiques"] },
+          { id: "GRI 5c", text: "Une procedure decrit les regles du calcul et de suivi regulier de la consommation des antibiotiques", docs: ["Procedure de calcul de consommation des antibiotiques"] },
+          { id: "GRI 5d", text: "L'etablissement procede a la confrontation et l'analyse de la consommation des antibiotiques et des resistances bacteriennes (au moins 1x/an)", docs: ["Releves de resistances bacteriennes", "Comptes rendus des reunions du comite therapeutique"] },
+          { id: "GRI 5e", text: "Une formation au bon usage des antibiotiques est assuree au profit des professionnels", docs: ["Plan de formation", "Feuilles de presence aux formations"] },
+          { id: "GRI 5f", text: "Une evaluation du dispositif de bon usage des antibiotiques est realisee au moins chaque annee et presentee au comite medical", docs: ["Rapports de suivi de la consommation des antibiotiques"] }
+        ]
+      },
+      "GRI 6": {
+        title: "Un dispositif permettant la detection precoce, l'investigation et la maitrise de tout episode epidemique est en place",
+        criteria: [
+          { id: "GRI 6a", text: "Une procedure decrit le systeme d'alerte et de detection precoce mis en place", docs: ["Procedure relative au systeme d'alerte et de detection precoce"] },
+          { id: "GRI 6b", text: "Une procedure decrit la demarche d'investigation d'une epidemie d'infections associees aux soins", docs: ["Procedure d'investigation d'epidemies d'IAS"] },
+          { id: "GRI 6c", text: "Les personnes impliquees dans l'investigation d'epidemies sont formees", docs: ["Plan de formation", "Feuilles de presence aux formations"] },
+          { id: "GRI 6d", text: "La documentation des episodes epidemiques d'infections associees aux soins est assuree", docs: ["Comptes rendus d'epidemies d'IAS vecues", "Fiches de signalement d'IAS"] },
+          { id: "GRI 6e", text: "L'etablissement informe les autorites sanitaires territorialement competentes de tout episode epidemique", docs: ["Fiches de signalement d'IAS"] }
+        ]
+      },
+      "GRI 7": {
+        title: "Les actes de soins a risque infectieux eleve sont identifies et font l'objet de procedures specifiques",
+        criteria: [
+          { id: "GRI 7a", text: "Les actes a risque infectieux eleve sont identifies", docs: ["Manuel de procedures de gestion du risque infectieux"] },
+          { id: "GRI 7b", text: "Des protocoles sont elabores et mis en oeuvre pour les actes a risque infectieux eleve", docs: ["Protocoles specifiques aux techniques de soins a risque infectieux eleve"] },
+          { id: "GRI 7c", text: "Le personnel soignant est forme a la mise en oeuvre des protocoles", docs: ["Plan de formation", "Feuilles de presence aux formations"] },
+          { id: "GRI 7d", text: "La mise en oeuvre des protocoles de soins a risque infectieux eleve fait l'objet d'evaluations regulieres", docs: ["Rapports d'evaluation"] }
+        ]
+      },
+      "GRI 8": {
+        title: "La prevention des accidents d'exposition au sang et de leurs consequences est assuree",
+        criteria: [
+          { id: "GRI 8a", text: "Une procedure decrit le systeme de gestion des accidents d'exposition au sang", docs: ["Procedure de gestion des AES"] },
+          { id: "GRI 8b", text: "La formation du personnel a la prevention des AES est assuree", docs: ["Plan de formation", "Rapports d'actions de formation"] },
+          { id: "GRI 8c", text: "Des equipements de protection adaptes sont disponibles", docs: ["Fiches techniques et affiches relatives aux precautions standards"] },
+          { id: "GRI 8d", text: "Les precautions standard sont appliquees par tous les soignants, pour tous les patients et lors de tout soin", docs: ["Resultats d'audits sur l'observance des precautions standards"] },
+          { id: "GRI 8e", text: "La vaccination du personnel contre l'hepatite B est assuree", docs: ["Registre de vaccination du personnel"] },
+          { id: "GRI 8f", text: "Les accidents d'exposition au sang sont systematiquement declares a l'administration de tutelle", docs: ["Protocole de prise en charge de victimes d'AES"] },
+          { id: "GRI 8g", text: "Une prise en charge adequate des victimes d'accidents d'exposition au sang est assuree", docs: ["Protocole de prise en charge de victimes d'AES"] }
+        ]
+      },
+      "GRI 9": {
+        title: "Un dispositif d'evaluation des ressources et pratiques d'hygiene hospitaliere est defini et mis en oeuvre",
+        criteria: [
+          { id: "GRI 9a", text: "Le dispositif d'evaluation des ressources et pratiques d'hygiene hospitaliere est formalise", docs: ["Plan annuel d'evaluation", "Referentiels utilises pour l'evaluation"] },
+          { id: "GRI 9b", text: "Les resultats des evaluations sont utilises pour orienter les mesures d'amelioration", docs: ["Rapports d'evaluations", "Plan d'action", "Tableaux de bord"] }
+        ]
+      }
+    };
+
+    const REF_KEYS = Object.keys(GRI_DATA);
+    const GROQ_MODEL = "openai/gpt-oss-120b";
+
+    let hospitals = {};
+    let currentHospital = null;
+    let currentRef = REF_KEYS[0];
+    let sharedDocs = {};
+    let evalResults = {};
+    let syntheses = {};
+
+    const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
+    const hospitalId = localStorage.getItem('hospitalId');
+    const storedName = localStorage.getItem('name');
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const paramHospitalId = urlParams.get('hospitalId');
+    const paramHospitalName = urlParams.get('hospital');
+
+    function logoutSession() {
+      localStorage.clear();
+      window.location.href = '/login.html';
+    }
+
+    (function configureHeaderNav() {
+      const btn = document.getElementById('navPortalBtn');
+      if (token && role) {
+        if (role === 'admin') {
+          btn.href = '/admin.html';
+          btn.innerHTML = '🛡️ Dashboard Admin';
+        } else if (role === 'hospital') {
+          btn.href = '/hospital.html';
+          btn.innerHTML = '🏥 Espace Hôpital';
+        }
+      }
+    })();
+
+    async function saveState() {
+      if (!currentHospital) return;
+      try {
+        const hospitalsLight = {};
+        Object.keys(hospitals).forEach(name => {
+          const h = hospitals[name];
+          const docsLight = {};
+          Object.keys(h.sharedDocs || {}).forEach(label => {
+            const d = h.sharedDocs[label];
+            docsLight[label] = { name: d.name, status: d.status, fromRef: d.fromRef };
+          });
+          hospitalsLight[name] = {
+            sharedDocs: docsLight,
+            evalResults: h.evalResults || {},
+            syntheses: h.syntheses || {},
+            currentRef: h.currentRef || REF_KEYS[0],
+            finalReport: h.finalReport || null
+          };
+        });
+
+        const dataToSave = {
+          sharedDocs,
+          evalResults,
+          syntheses,
+          currentRef,
+          finalReport: (hospitals[currentHospital] && hospitals[currentHospital].finalReport) || null
+        };
+
+        localStorage.setItem('AccrediX_gri_multi', JSON.stringify({ hospitals: hospitalsLight, currentHospital }));
+
+        if (token) {
+          const targetId = paramHospitalId || hospitalId || currentHospital;
+          fetch('/api/evaluations/' + encodeURIComponent(targetId), {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify(dataToSave)
+          }).catch(() => { });
+        }
+      } catch (e) { }
+    }
+
+    async function loadServerEvaluation(hId) {
+      if (!token) return null;
+      try {
+        const res = await fetch('/api/evaluations/' + encodeURIComponent(hId), {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (res.ok) return await res.json();
+      } catch { }
+      return null;
+    }
+
+    function initHospital(targetName) {
+      if (!targetName) return;
+      currentHospital = targetName;
+      if (!hospitals[targetName]) {
+        hospitals[targetName] = { sharedDocs: {}, evalResults: {}, syntheses: {}, currentRef: REF_KEYS[0], finalReport: null };
+      }
+
+      const h = hospitals[targetName];
+      sharedDocs = h.sharedDocs || {};
+      evalResults = h.evalResults || {};
+      syntheses = h.syntheses || {};
+      currentRef = h.currentRef || REF_KEYS[0];
+
+      document.getElementById('headerHospitalName').textContent = targetName;
+      document.getElementById('hospitalSelector').style.display = 'none';
+
+      renderAll();
+      updateDashboard();
+      renderReport();
+
+      if (h.finalReport) {
+        document.getElementById('finalReportBox').style.display = 'block';
+        document.getElementById('finalReportText').innerHTML = h.finalReport;
+      } else {
+        document.getElementById('finalReportBox').style.display = 'none';
+      }
+    }
+
+    function renderAll() {
+      buildRefTabs();
+      renderRefDetail();
+      buildUploadGrid();
+      renderCriteriaForm();
+      renderSynthese();
+      if (typeof applyReadOnlyMode === 'function') {
+        applyReadOnlyMode(window.isCurrentHospitalExpired || false);
+      }
+    }
+
+    function updateDashboard() {
+      const evalCount = Object.keys(evalResults).length;
+      const totalCrit = REF_KEYS.reduce((sum, k) => sum + GRI_DATA[k].criteria.length, 0);
+      let covered = 0;
+      REF_KEYS.forEach(k => {
+        const res = evalResults[k] || [];
+        covered += res.filter(r => r.existant === 'Oui').length;
+      });
+      const pct = totalCrit > 0 ? Math.round((covered / totalCrit) * 100) : 0;
+
+      document.getElementById('dashEvaluated').innerHTML = `${evalCount} <span class="total">/ ${REF_KEYS.length}</span>`;
+      document.getElementById('dashEvaluatedSub').textContent = evalCount === 0 ? 'Aucune référence analysée' : `${evalCount} référence(s) renseignée(s)`;
+      document.getElementById('dashCovered').innerHTML = `${covered} <span class="total">/ ${totalCrit}</span>`;
+      document.getElementById('dashCoveredSub').textContent = `${covered} critères conformes`;
+      document.getElementById('dashRate').textContent = `${pct}%`;
+      document.getElementById('dashRateSub').textContent = pct < 30 ? 'Niveau initial' : pct < 60 ? 'Niveau intermédiaire' : pct < 85 ? 'Niveau avancé' : 'Niveau d\'excellence';
+    }
+
+    function buildRefTabs() {
+      const tabs = document.getElementById('refTabs');
+      tabs.innerHTML = REF_KEYS.map(k => {
+        const res = evalResults[k] || [];
+        const total = GRI_DATA[k].criteria.length;
+        const oui = res.filter(r => r.existant === 'Oui').length;
+        const hasData = res.length > 0;
+        return `
+          <div class="ref-tab ${k === currentRef ? 'active' : ''}" data-ref="${k}">
+            <span class="dot ${hasData ? 'done' : ''}"></span>
+            <span>${k}</span>
+            ${hasData ? `<span class="score">(${oui}/${total})</span>` : ''}
+          </div>
+        `;
+      }).join('');
+
+      tabs.querySelectorAll('.ref-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          currentRef = tab.dataset.ref;
+          if (currentHospital && hospitals[currentHospital]) {
+            hospitals[currentHospital].currentRef = currentRef;
+          }
+          renderAll();
+          saveState();
+        });
+      });
+    }
+
+    function renderRefDetail() {
+      const ref = GRI_DATA[currentRef];
+      document.getElementById('refDetail').innerHTML = `
+        <div class="ref-code">${currentRef} — ${ref.title}</div>
+        <div class="crit-count">${ref.criteria.length} critère(s) associè(s) : ${ref.criteria.map(c => c.id).join(', ')}</div>
+      `;
+      document.getElementById('mainTitle').textContent = `${currentRef} — ${ref.title}`;
+      document.getElementById('refCodeLabel').textContent = currentRef;
+      document.getElementById('tableRefLabel').textContent = currentRef;
+      document.getElementById('syntheseRefLabel').textContent = currentRef;
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function docKey(label) { return label.replace(/[^a-zA-Z0-9]/g, '_'); }
+    function uniqueDocsForRef(refKey) {
+      const set = [];
+      GRI_DATA[refKey].criteria.forEach(c => c.docs.forEach(d => { if (!set.includes(d)) set.push(d); }));
+      return set;
+    }
+
+    function buildUploadGrid() {
+      const docs = uniqueDocsForRef(currentRef);
+      const grid = document.getElementById('uploadGrid');
+      grid.innerHTML = docs.map((label, idx) => {
+        const doc = sharedDocs[label];
+        const isUploaded = doc && doc.status === 'OK';
+        return `
+          <div class="upload-card">
+            <span class="label">📄 ${escapeHtml(label)}</span>
+            <div class="status">${isUploaded ? `✅ Reçu: <strong>${escapeHtml(doc.name)}</strong>` : '❌ Fichier absent'}</div>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:auto;">
+              <label class="btn-file">
+                📁 ${isUploaded ? 'Remplacer le fichier' : 'Choisir un fichier'}
+                <input type="file" class="doc-upload-input" data-doc-idx="${idx}">
+              </label>
+              ${isUploaded ? `<button type="button" class="btn-remove-doc" data-doc-idx="${idx}" style="background:none;border:none;color:#dc2626;font-size:0.75rem;cursor:pointer;font-weight:600;padding:4px 6px;">✕ Retirer</button>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Écouteurs d'événements attachés sans risque d'apostrophes
+      grid.querySelectorAll('.doc-upload-input').forEach(input => {
+        input.addEventListener('change', (e) => {
+          const idx = parseInt(input.dataset.docIdx, 10);
+          const docLabel = docs[idx];
+          handleFileUpload(e, docLabel);
+        });
+      });
+
+      grid.querySelectorAll('.btn-remove-doc').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = parseInt(btn.dataset.docIdx, 10);
+          const docLabel = docs[idx];
+          removeFileUpload(docLabel);
+        });
+      });
+    }
+
+    function handleFileUpload(e, label) {
+      const file = e.target.files[0];
+      if (!file) return;
+      sharedDocs[label] = { name: file.name, status: 'OK', fromRef: currentRef };
+      if (currentHospital && hospitals[currentHospital]) {
+        hospitals[currentHospital].sharedDocs = sharedDocs;
+      }
+      buildUploadGrid();
+      renderCriteriaForm();
+      saveState();
+    }
+
+    function removeFileUpload(label) {
+      delete sharedDocs[label];
+      if (currentHospital && hospitals[currentHospital]) {
+        hospitals[currentHospital].sharedDocs = sharedDocs;
+      }
+      buildUploadGrid();
+      renderCriteriaForm();
+      saveState();
+    }
+
+    function renderCriteriaForm() {
+      const zone = document.getElementById('overviewZone');
+      const criteria = GRI_DATA[currentRef].criteria;
+      const currentRes = evalResults[currentRef] || [];
+      const isAnalyzed = currentRes.length > 0;
+
+      const rows = criteria.map(c => {
+        const existing = currentRes.find(r => r.id === c.id) || { existant: '', preuve: '' };
+        const val = existing.existant || '';
+
+        const statusClass = val === 'Oui' ? 'row-status-oui'
+          : val === 'Partiel' ? 'row-status-partiel'
+            : val === 'Non' ? 'row-status-non'
+              : 'row-status-empty';
+
+        // Badge de cotation (affiché seulement après analyse)
+        let cotBadge;
+        if (val === 'Oui') {
+          cotBadge = `<span class="cot-badge oui">✅ Conforme</span>`;
+        } else if (val === 'Partiel') {
+          cotBadge = `<span class="cot-badge partiel">⚠️ Partiel</span>`;
+        } else if (val === 'Non') {
+          cotBadge = `<span class="cot-badge non">❌ Non conforme</span>`;
+        } else {
+          cotBadge = `<span class="cot-badge empty">En attente…</span>`;
+        }
+
+        const docBadges = c.docs.map(d => {
+          const uploaded = sharedDocs[d];
+          const present = uploaded?.status === 'OK';
+          return `<div class="doc-badge ${present ? 'present' : 'absent'}">
+            <span class="doc-badge-icon">${present ? '✅' : '📄'}</span>
+            <span class="doc-badge-text">${d}</span>
+          </div>`;
+        }).join('');
+
+        return `
+          <tr data-id="${c.id}">
+            <td class="row-status-bar ${statusClass}"></td>
+            <td class="td-id">${c.id}</td>
+            <td class="td-critere"><div class="crit-text">${c.text}</div></td>
+            <td class="td-docs"><div class="doc-badge-list">${docBadges}</div></td>
+            <td class="td-cotation">${cotBadge}</td>
+            <td class="td-preuve">
+              <textarea placeholder="Éléments de preuve ou justificatifs..." oninput="setProof('${c.id}', this.value)">${existing.preuve || ''}</textarea>
+            </td>
+          </tr>`;
+      }).join('');
+
+      const analyzeHint = !isAnalyzed
+        ? `<div style="text-align:center;padding:10px 0 4px;font-size:0.8rem;color:#94a3b8;">💡 Lancez l'évaluation pour établir les cotations de conformité.</div>`
+        : '';
+
+      zone.innerHTML = `
+        ${analyzeHint}
+        <div class="eval-table-wrap">
+          <table class="eval-table">
+            <thead>
+              <tr>
+                <th style="width:4px;padding:0;"></th>
+                <th>Réf.</th>
+                <th>Critère officiel</th>
+                <th>Documents requis</th>
+                <th style="text-align:center;">Cotation d'Audit</th>
+                <th>Éléments de preuve</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>`;
+    }
+
+    function setRating(critId, rating) {
+      if (!evalResults[currentRef]) evalResults[currentRef] = [];
+      let item = evalResults[currentRef].find(r => r.id === critId);
+      if (!item) {
+        item = { id: critId, existant: rating, preuve: '' };
+        evalResults[currentRef].push(item);
+      } else {
+        item.existant = rating;
+      }
+      if (currentHospital && hospitals[currentHospital]) {
+        hospitals[currentHospital].evalResults = evalResults;
+      }
+      renderCriteriaForm();
+      updateDashboard();
+      renderReport();
+      saveState();
+    }
+
+    function setProof(critId, proofText) {
+      if (!evalResults[currentRef]) evalResults[currentRef] = [];
+      let item = evalResults[currentRef].find(r => r.id === critId);
+      if (!item) {
+        item = { id: critId, existant: '', preuve: proofText };
+        evalResults[currentRef].push(item);
+      } else {
+        item.preuve = proofText;
+      }
+      if (currentHospital && hospitals[currentHospital]) {
+        hospitals[currentHospital].evalResults = evalResults;
+      }
+      saveState();
+    }
+
+    function renderSynthese() {
+      const syn = syntheses[currentRef];
+      const sec = document.getElementById('syntheseSection');
+      if (syn) {
+        sec.style.display = 'block';
+        document.getElementById('syntheseText').innerHTML = syn;
+      } else {
+        sec.style.display = 'none';
+      }
+    }
+
+    function renderReport() {
+      const table = document.getElementById('reportTable');
+      let rows = `
+        <div class="report-row head">
+          <div>Réf.</div>
+          <div>Intitulé Officiel</div>
+          <div>Oui</div>
+          <div>Partiel</div>
+          <div>Non</div>
+          <div>Accréditation</div>
+        </div>
+      `;
+
+      REF_KEYS.forEach(k => {
+        const ref = GRI_DATA[k];
+        const res = evalResults[k] || [];
+        const total = ref.criteria.length;
+        const oui = res.filter(r => r.existant === 'Oui').length;
+        const partiel = res.filter(r => r.existant === 'Partiel').length;
+        const non = res.filter(r => r.existant === 'Non').length;
+        const pct = total > 0 ? Math.round((oui / total) * 100) : 0;
+        const hasData = res.length > 0;
+        const barClass = pct >= 70 ? 'oui' : pct >= 40 ? 'partiel' : 'non';
+
+        rows += `
+          <div class="report-row">
+            <div style="font-weight:800; color:var(--primary);">${k}</div>
+            <div>${ref.title}</div>
+            <div>${hasData ? oui : '—'}</div>
+            <div>${hasData ? partiel : '—'}</div>
+            <div>${hasData ? non : '—'}</div>
+            <div>
+              <div class="bar-bg"><div class="bar-fill ${barClass}" style="width:${hasData ? pct : 0}%"></div></div>
+              <span style="font-size:0.75rem; color:var(--text-muted); font-family:var(--font-mono);">${hasData ? pct + '%' : 'Non évalué'}</span>
+            </div>
+          </div>
+        `;
+      });
+
+      table.innerHTML = rows;
+    }
+
+    async function callGroqAI(systemPrompt, userPrompt, maxTokens = 2048) {
+      const response = await fetch("/api/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: GROQ_MODEL,
+          max_tokens: maxTokens,
+          system: systemPrompt,
+          messages: [{ role: "user", content: userPrompt }]
+        })
+      });
+
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        throw new Error(errData.error || "Erreur de réponse API (" + response.status + ")");
+      }
+      const data = await response.json();
+      const text = data.choices?.[0]?.message?.content;
+      if (!text) throw new Error("Réponse vide reçue de l'IA.");
+      return text.trim();
+    }
+
+    /**
+     * Construit un résumé de l'état actuel de l'évaluation pour un référentiel donné.
+     * Inclut : liste des critères, cotations manuelles existantes, preuves saisies, documents disponibles.
+     */
+    function buildEvalContext(refKey) {
+      const ref = GRI_DATA[refKey];
+      const currentEval = evalResults[refKey] || [];
+      const docs = uniqueDocsForRef(refKey);
+
+      const criteriaLines = ref.criteria.map(c => {
+        const existing = currentEval.find(r => r.id === c.id);
+        const cotation = existing ? existing.existant : 'Non évalué';
+        const preuve = existing?.preuve?.trim() ? existing.preuve.trim() : 'Aucune preuve saisie';
+        const docList = c.docs.map(d => {
+          const uploaded = sharedDocs[d];
+          return `"${d}" : ${uploaded?.status === 'OK' ? '✅ Présent (' + uploaded.name + ')' : '❌ Absent'}`;
+        }).join(', ');
+        return `- [${c.id}] ${c.text}\n  Cotation actuelle: ${cotation}\n  Preuve saisie: ${preuve}\n  Documents requis: ${docList}`;
+      }).join('\n\n');
+
+      return { ref, criteriaLines, docs };
+    }
+
+    /**
+     * Tente d'extraire un JSON valide d'une réponse IA qui peut contenir du texte autour.
+     */
+    function extractJSON(text) {
+      // Essai 1 : parse direct
+      try { return JSON.parse(text); } catch (_) { }
+      // Essai 2 : extraction du bloc JSON entre { }
+      const match = text.match(/\{[\s\S]*\}/);
+      if (match) { try { return JSON.parse(match[0]); } catch (_) { } }
+      // Essai 3 : extraction d'un bloc ```json ... ```
+      const mdMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/);
+      if (mdMatch) { try { return JSON.parse(mdMatch[1]); } catch (_) { } }
+      return null;
+    }
+
+    async function analyzeReference() {
+      const btn = document.getElementById('analyzeBtn');
+      const note = document.getElementById('progressNote');
+      btn.disabled = true;
+
+      const ref = GRI_DATA[currentRef];
+      const { criteriaLines } = buildEvalContext(currentRef);
+
+      note.innerHTML = `⏳ <strong>Audit en cours d'évaluation</strong> pour <strong>${currentRef}</strong>… Examen méthodique des critères et justificatifs.`;
+
+      const systemPrompt = `Tu es un expert auditeur accrédité AccrediX (Instance Nationale d'Évaluation et d'Accréditation en Santé, Tunisie). 
+Tu effectues des audits d'auto-évaluation hospitalière selon le référentiel GRI (Gestion du Risque Infectieux).
+Ton rôle est d'analyser rigoureusement chaque critère et d'attribuer une cotation RÉELLE et JUSTIFIÉE basée sur les documents disponibles et les preuves saisies.
+
+RÈGLES STRICTES :
+- Si les documents requis sont ABSENTS, la cotation ne peut PAS être "Oui" — elle doit être "Partiel" ou "Non".
+- Si aucune preuve n'est saisie et les documents sont absents, la cotation doit être "Non".
+- Si des documents sont présents mais incomplets ou partiels, la cotation est "Partiel".
+- "Oui" uniquement si les documents requis sont présents ET la preuve est cohérente.
+- Chaque justification doit être concrète et mentionner explicitement les documents disponibles ou manquants.
+
+RÉPONDS UNIQUEMENT avec un objet JSON valide, sans texte avant ni après, respectant exactement cette structure :
+{
+  "cotations": [
+    {
+      "id": "GRI Xa",
+      "cotation": "Oui|Partiel|Non",
+      "justification": "Explication précise basée sur les documents disponibles et les preuves."
+    }
+  ],
+  "synthese": "Paragraphe de synthèse globale du référentiel en français (5-8 phrases).",
+  "points_forts": ["Point fort 1", "Point fort 2"],
+  "points_amelioration": ["Axe d'amélioration 1", "Axe d'amélioration 2"],
+  "score_global": "XX%"
+}`;
+
+      const userPrompt = `Établissement: ${currentHospital}
+Référentiel: ${currentRef} — ${ref.title}
+
+ÉTAT ACTUEL DE L'ÉVALUATION :
+${criteriaLines}
+
+Analyse chaque critère selon les règles strictes et génère le JSON de résultats.`;
+
+      try {
+        const text = await callGroqAI(systemPrompt, userPrompt, 2500);
+        const parsed = extractJSON(text);
+
+        if (!parsed || !parsed.cotations || !Array.isArray(parsed.cotations)) {
+          throw new Error("Réponse IA invalide : structure JSON attendue non trouvée. Réessayez.");
+        }
+
+        // Appliquer les vraies cotations de l'IA
+        if (!evalResults[currentRef]) evalResults[currentRef] = [];
+
+        let appliquees = 0;
+        parsed.cotations.forEach(item => {
+          const crit = ref.criteria.find(c => c.id === item.id);
+          if (!crit) return;
+          const cotation = ['Oui', 'Partiel', 'Non'].includes(item.cotation) ? item.cotation : 'Non';
+          const existing = evalResults[currentRef].find(r => r.id === item.id);
+          if (existing) {
+            existing.existant = cotation;
+            existing.preuve = item.justification || existing.preuve;
+          } else {
+            evalResults[currentRef].push({ id: item.id, existant: cotation, preuve: item.justification || '' });
+          }
+          appliquees++;
+        });
+
+        // Générer la synthèse HTML structurée
+        const ouiCount = parsed.cotations.filter(c => c.cotation === 'Oui').length;
+        const partielCount = parsed.cotations.filter(c => c.cotation === 'Partiel').length;
+        const nonCount = parsed.cotations.filter(c => c.cotation === 'Non').length;
+        const scoreDisplay = parsed.score_global || Math.round((ouiCount / ref.criteria.length) * 100) + '%';
+
+        const syntheseHTML = `
+<div style="font-family:var(--font-sans); line-height:1.7; color:var(--text);">
+  <div style="display:flex; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
+    <span style="background:#d1fae5; color:#065f46; padding:6px 14px; border-radius:20px; font-weight:700; font-size:0.85rem;">✅ Conforme : ${ouiCount}</span>
+    <span style="background:#fef3c7; color:#92400e; padding:6px 14px; border-radius:20px; font-weight:700; font-size:0.85rem;">⚠️ Partiel : ${partielCount}</span>
+    <span style="background:#fee2e2; color:#991b1b; padding:6px 14px; border-radius:20px; font-weight:700; font-size:0.85rem;">❌ Non conforme : ${nonCount}</span>
+    <span style="background:#ede9fe; color:#5b21b6; padding:6px 14px; border-radius:20px; font-weight:700; font-size:0.85rem;">📊 Score : ${scoreDisplay}</span>
+  </div>
+  ${parsed.synthese ? `<div style="background:#f8fafc; border-left:4px solid var(--primary); padding:14px 16px; border-radius:0 8px 8px 0; margin-bottom:16px; font-size:0.92rem;"><strong>Synthèse :</strong><br>${parsed.synthese}</div>` : ''}
+  ${parsed.points_forts?.length ? `<div style="margin-bottom:12px;"><strong style="color:#065f46;">💪 Points forts :</strong><ul style="margin:6px 0 0 16px; padding:0;">${parsed.points_forts.map(p => `<li>${p}</li>`).join('')}</ul></div>` : ''}
+  ${parsed.points_amelioration?.length ? `<div><strong style="color:#b45309;">🔧 Axes d'amélioration :</strong><ul style="margin:6px 0 0 16px; padding:0;">${parsed.points_amelioration.map(p => `<li>${p}</li>`).join('')}</ul></div>` : ''}
+  <div style="margin-top:14px; padding:12px 16px; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; font-size:0.82rem; color:#166534; display:flex; align-items:center; gap:10px;">
+    <span style="font-size:1.1rem;">👨‍⚕️</span>
+    <span><strong>Évaluation d'accréditation validée</strong> — ${appliquees} critère(s) audité(s) sur ${ref.criteria.length} selon le référentiel officiel national GRI (Commission Qualité).</span>
+  </div>
+</div>`;
+
+        syntheses[currentRef] = syntheseHTML;
+        if (currentHospital && hospitals[currentHospital]) {
+          hospitals[currentHospital].syntheses = syntheses;
+          hospitals[currentHospital].evalResults = evalResults;
+        }
+
+        note.innerHTML = `✅ <strong>Évaluation établie !</strong> ${appliquees} critère(s) analysé(s) — Score de conformité : <strong>${scoreDisplay}</strong>`;
+        renderAll();
+        updateDashboard();
+        renderReport();
+        saveState();
+
+      } catch (err) {
+        note.innerHTML = `❌ <strong>Erreur :</strong> ${err.message}`;
+        console.error('[analyzeReference]', err);
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    async function generateSynthese() {
+      const btn = document.getElementById('syntheseBtn');
+      btn.disabled = true;
+      btn.textContent = "⏳ Génération...";
+
+      const ref = GRI_DATA[currentRef];
+      const { criteriaLines } = buildEvalContext(currentRef);
+      const currentEval = evalResults[currentRef] || [];
+      const ouiCount = currentEval.filter(r => r.existant === 'Oui').length;
+      const partielCount = currentEval.filter(r => r.existant === 'Partiel').length;
+      const nonCount = currentEval.filter(r => r.existant === 'Non').length;
+      const pct = ref.criteria.length > 0 ? Math.round((ouiCount / ref.criteria.length) * 100) : 0;
+
+      const systemPrompt = `Tu es un expert rédacteur de rapports d'accréditation hospitalière AccrediX.
+Rédige une synthèse narrative professionnelle, structurée et précise pour le rapport d'auto-évaluation.
+Utilise les données réelles fournies. Ne fabrique pas de données absentes.
+Réponds en HTML simple (pas de markdown), utilisable directement dans une page web.`;
+
+      const userPrompt = `Établissement: ${currentHospital}
+Référentiel: ${currentRef} — ${ref.title}
+Score actuel: ${ouiCount} Oui / ${partielCount} Partiel / ${nonCount} Non (${pct}% de conformité)
+
+DÉTAIL DES CRITÈRES :
+${criteriaLines}
+
+Rédige une synthèse HTML de 4 à 6 paragraphes incluant :
+1. Présentation du référentiel évalué
+2. Analyse des points forts (critères Oui)
+3. Analyse des points à améliorer (critères Partiel ou Non)
+4. Recommandations concrètes et prioritaires
+5. Conclusion et niveau d'accréditation estimé`;
+
+      try {
+        const text = await callGroqAI(systemPrompt, userPrompt, 2000);
+        syntheses[currentRef] = text;
+        if (currentHospital && hospitals[currentHospital]) {
+          hospitals[currentHospital].syntheses = syntheses;
+        }
+        renderSynthese();
+        saveState();
+      } catch (e) {
+        alert("❌ Erreur lors de la génération : " + e.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "✨ Générer la Synthèse de la référence";
+      }
+    }
+
+    async function generateFinalReport() {
+      const btn = document.getElementById('generateFinalReportBtn');
+      btn.disabled = true;
+      btn.textContent = "⏳ Génération du rapport global...";
+
+      // Compilation de toutes les données d'évaluation
+      let globalSummary = '';
+      let totalOui = 0, totalPartiel = 0, totalNon = 0, totalCrit = 0;
+
+      REF_KEYS.forEach(k => {
+        const ref = GRI_DATA[k];
+        const res = evalResults[k] || [];
+        const oui = res.filter(r => r.existant === 'Oui').length;
+        const partiel = res.filter(r => r.existant === 'Partiel').length;
+        const non = res.filter(r => r.existant === 'Non').length;
+        const pct = ref.criteria.length > 0 ? Math.round((oui / ref.criteria.length) * 100) : 0;
+        totalOui += oui; totalPartiel += partiel; totalNon += non; totalCrit += ref.criteria.length;
+        globalSummary += `\n${k} (${ref.title}) : ${oui} Oui / ${partiel} Partiel / ${non} Non — ${pct}% — ${res.length === 0 ? 'Non évalué' : 'Évalué'}`;
+      });
+
+      const globalPct = totalCrit > 0 ? Math.round((totalOui / totalCrit) * 100) : 0;
+      const niveau = globalPct < 30 ? 'Niveau Initial' : globalPct < 60 ? 'Niveau Intermédiaire' : globalPct < 85 ? 'Niveau Avancé' : 'Niveau Excellence';
+
+      const systemPrompt = `Tu es l'expert principal AccrediX chargé de rédiger le rapport global d'accréditation hospitalière.
+Rédige un rapport officiel, professionnel, structuré et factuel basé UNIQUEMENT sur les données réelles fournies.
+Ne fabrique pas de données. Si un référentiel n'est pas évalué, mentionne-le clairement.
+Réponds en HTML structuré (h3, p, ul, strong, em), utilisable directement dans une page web.`;
+
+      const userPrompt = `RAPPORT D'AUTO-ÉVALUATION GRI — ÉTABLISSEMENT : ${currentHospital}
+Date : ${new Date().toLocaleDateString('fr-FR')}
+Score global : ${totalOui} Oui / ${totalPartiel} Partiel / ${totalNon} Non sur ${totalCrit} critères (${globalPct}% — ${niveau})
+
+RÉSULTATS PAR RÉFÉRENTIEL :
+${globalSummary}
+
+Rédige le rapport global incluant :
+1. En-tête officiel et contexte
+2. Résumé exécutif (score global et niveau)
+3. Analyse par référentiel (points forts et faibles)
+4. Plan d'action recommandé avec priorités
+5. Conclusion et recommandation d'accréditation`;
+
+      try {
+        const text = await callGroqAI(systemPrompt, userPrompt, 3000);
+        if (currentHospital && hospitals[currentHospital]) {
+          hospitals[currentHospital].finalReport = text;
+        }
+        document.getElementById('finalReportBox').style.display = 'block';
+        document.getElementById('finalReportText').innerHTML = text;
+        saveState();
+      } catch (e) {
+        alert("❌ Erreur lors de la génération : " + e.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "📑 Établir le Rapport Global d'Accréditation";
+      }
+    }
+
+    function printSelectedReference() {
+      printOfficialReport();
+    }
+
+    function buildOfficialReport() {
+      const paper = document.getElementById('printableOfficialReport');
+      if (!paper) return;
+
+      const hospData = window.currentHospitalData || {};
+      const hospName = currentHospital || hospData.name || 'Établissement Hospitalier';
+      const hospId = hospData.id || paramHospitalId || hospitalId || 'h1';
+      const hospCity = hospData.city || 'Tunis';
+      const hospType = hospData.type || 'Centre Hospitalier Universitaire';
+      const deadlineStr = hospData.isExpired
+        ? '<span style="color:#b91c1c; font-weight:700;">Délai officiel de 15 jours échu</span>'
+        : (hospData.daysRemaining !== undefined
+          ? `15 jours réglementaires (${hospData.daysRemaining} jour(s) restants)`
+          : 'Délai réglementaire de 15 jours');
+
+      const dateStr = new Date().toLocaleDateString('fr-FR', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric'
+      });
+
+      // Statistiques globales
+      let totalCrit = 0, totalOui = 0, totalPartiel = 0, totalNon = 0;
+      let evaluatedCount = 0;
+      let tableRowsHtml = '';
+
+      REF_KEYS.forEach(k => {
+        const ref = GRI_DATA[k];
+        const res = evalResults[k] || [];
+        const count = ref.criteria.length;
+        const oui = res.filter(r => r.existant === 'Oui').length;
+        const partiel = res.filter(r => r.existant === 'Partiel').length;
+        const non = res.filter(r => r.existant === 'Non').length;
+        const pct = count > 0 ? Math.round((oui / count) * 100) : 0;
+        const hasData = res.length > 0;
+
+        totalCrit += count;
+        totalOui += oui;
+        totalPartiel += partiel;
+        totalNon += non;
+        if (hasData) evaluatedCount++;
+
+        let statusClass = 'pill-gray';
+        let statusLabel = 'Non audité';
+        if (hasData) {
+          if (pct >= 70) {
+            statusClass = 'pill-green';
+            statusLabel = 'Conforme';
+          } else if (pct >= 40) {
+            statusClass = 'pill-amber';
+            statusLabel = 'Partiel';
+          } else {
+            statusClass = 'pill-red';
+            statusLabel = 'Défavorable';
+          }
+        }
+
+        tableRowsHtml += `
+          <tr>
+            <td class="ref-badge">${k}</td>
+            <td class="td-left" style="font-weight:600;">${ref.title}</td>
+            <td style="font-weight:700;">${count}</td>
+            <td class="badge-oui">${hasData ? oui : '—'}</td>
+            <td class="badge-partiel">${hasData ? partiel : '—'}</td>
+            <td class="badge-non">${hasData ? non : '—'}</td>
+            <td style="font-weight:800; font-family:'JetBrains Mono', monospace;">${hasData ? pct + '%' : '—'}</td>
+            <td><span class="status-pill ${statusClass}">${statusLabel}</span></td>
+          </tr>
+        `;
+      });
+
+      const globalPct = totalCrit > 0 ? Math.round((totalOui / totalCrit) * 100) : 0;
+      let levelNum = hospData.level;
+      if (!levelNum) {
+        levelNum = globalPct >= 80 ? 5 : globalPct >= 65 ? 4 : globalPct >= 50 ? 3 : globalPct >= 30 ? 2 : 1;
+      }
+      const levelLabels = {
+        1: "Niveau 1 — Stade Initial / Prérequis Qualité",
+        2: "Niveau 2 — Démarche Qualité en Développement",
+        3: "Niveau 3 — Conformité Opérationnelle",
+        4: "Niveau 4 — Maturité Avancée / En voie d'Accréditation",
+        5: "Niveau 5 — Excellence & Maîtrise des Risques"
+      };
+      const levelText = levelLabels[levelNum] || `Niveau ${levelNum} / 5`;
+
+      // Détails par référence
+      let detailedSynthesesHtml = '';
+      let hasAnyDetailed = false;
+
+      REF_KEYS.forEach(k => {
+        const ref = GRI_DATA[k];
+        const res = evalResults[k] || [];
+        const syn = syntheses[k];
+        if (res.length > 0 || syn) {
+          hasAnyDetailed = true;
+          const oui = res.filter(r => r.existant === 'Oui').length;
+          const pct = Math.round((oui / ref.criteria.length) * 100);
+
+          let docsList = [];
+          Object.keys(sharedDocs).forEach(docKey => {
+            const d = sharedDocs[docKey];
+            if (d && d.fromRef === k) docsList.push(`${docKey} (fichier : ${d.name})`);
+          });
+          res.forEach(item => {
+            if (item.doc && !docsList.includes(item.doc)) docsList.push(item.doc);
+          });
+
+          detailedSynthesesHtml += `
+            <div class="report-detailed-card avoid-break">
+              <div class="card-head">
+                <div class="card-title">${k} — ${ref.title}</div>
+                <div class="card-score">Score : <strong>${pct}%</strong> (${oui}/${ref.criteria.length} conformes)</div>
+              </div>
+              <div class="card-body">
+                ${syn ? syn : '<p style="color:#64748b; font-style:italic;">Critères renseignés dans la grille d\'audit sans synthèse narrative personnalisée.</p>'}
+              </div>
+              ${docsList.length > 0 ? `
+                <div class="card-proofs">
+                  <strong>📁 Éléments de preuve enregistrés :</strong> ${docsList.join(' • ')}
+                </div>
+              ` : ''}
+            </div>
+          `;
+        }
+      });
+
+      if (!hasAnyDetailed) {
+        detailedSynthesesHtml = `
+          <div style="background:#f8fafc; border:1px dashed #cbd5e1; padding:20px; text-align:center; border-radius:8px; color:#64748b; font-size:0.85rem;">
+            Aucune référence n'a encore été finalisée avec synthèse. Renseignez la grille d'auto-évaluation pour enrichir ce volet analytique.
+          </div>
+        `;
+      }
+
+      // Rapport Stratégique Global / IA
+      let strategicHtml = '';
+      const savedReport = (hospitals[currentHospital] && hospitals[currentHospital].finalReport) || document.getElementById('finalReportText')?.innerHTML;
+      if (savedReport && savedReport.trim()) {
+        strategicHtml = savedReport;
+      } else {
+        strategicHtml = `
+          <p>L’évaluation globale de la gestion des risques infectieux menée pour <strong>${hospName}</strong> fait ressortir un taux global de conformité de <strong>${globalPct}%</strong>, situant l’établissement au <strong>${levelText}</strong> du référentiel national AccrediX.</p>
+          <p style="margin-top:10px;">L’audit met en évidence les constats structurants suivants :</p>
+          <ul>
+            <li><strong>Gouvernance et organisation :</strong> Présence des documents fondateurs et engagement de la direction dans la démarche qualité, nécessitant un renforcement de la formalisation des comités spécialisés (CLPIAS, EOHH).</li>
+            <li><strong>Pratiques professionnelles et prévention :</strong> Dispositif d’hygiène des mains et précautions standard à consolider par des évaluations régulières de l'observance et des plans de formation tracés.</li>
+            <li><strong>Gestion des risques spécifiques :</strong> Nécessité de formaliser les protocoles de surveillance épidémiologique des IAS et le bon usage des antibiotiques conformément aux recommandations nationales.</li>
+          </ul>
+        `;
+      }
+
+      paper.innerHTML = `
+        <!-- En-tête officiel avec Logo AccrediX -->
+        <div class="gov-letterhead">
+          <div class="gov-text-left">
+            <div class="rep-title">RÉPUBLIQUE TUNISIENNE</div>
+            <div class="min-title">MINISTÈRE DE LA SANTÉ</div>
+            <div class="inst-title">AccrediX — Système National d'Accréditation des Établissements de Santé
+</div>
+            <div class="dep-title">Direction de l'Accréditation et de l'Évaluation de la Qualité des Soins</div>
+          </div>
+          <div class="gov-logo-center">
+            <img src="assets/logo_AccrediX.png" alt="Logo Officiel AccrediX" class="report-logo" onerror="this.style.display='none'">
+          </div>
+          <div class="gov-meta-right">
+            <div class="meta-code">AccrediX-GRI-2026-${hospId.toUpperCase()}</div>
+            <div class="meta-date">Date : ${dateStr}</div>
+            <div class="meta-badge">RAPPORT OFFICIEL D'ACCRÉDITATION</div>
+          </div>
+        </div>
+
+        <div class="report-divider-gov"></div>
+
+        <!-- Titre du Rapport -->
+        <div class="report-header-title">
+          <h1>RAPPORT D'AUTO-ÉVALUATION & D'ACCRÉDITATION</h1>
+          <h2>RÉFÉRENTIEL NATIONAL DE GESTION DU RISQUE INFECTIEUX (GRI)</h2>
+          <p class="report-subtitle">Programme National d'Accréditation des Établissements de Santé — Cycle 2026</p>
+        </div>
+
+        <!-- Section 1 : Identification de l'Établissement -->
+        <div class="report-block avoid-break">
+          <div class="block-title">
+            <span class="block-num">I</span>
+            <h3>IDENTIFICATION DE L'ÉTABLISSEMENT AUDITÉ</h3>
+          </div>
+          <table class="report-id-table">
+            <tr>
+              <td class="id-label">Établissement de Santé :</td>
+              <td class="id-val"><strong>${hospName}</strong></td>
+              <td class="id-label">Identifiant National :</td>
+              <td class="id-val"><code>${hospId}</code></td>
+            </tr>
+            <tr>
+              <td class="id-label">Catégorie / Statut :</td>
+              <td class="id-val">${hospType}</td>
+              <td class="id-label">Gouvernorat / Ville :</td>
+              <td class="id-val">${hospCity}</td>
+            </tr>
+            <tr>
+              <td class="id-label">Délai Réglementaire :</td>
+              <td class="id-val">${deadlineStr}</td>
+              <td class="id-label">Date du Rapport :</td>
+              <td class="id-val">${dateStr}</td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- Section 2 : Tableau de bord exécutif -->
+        <div class="report-block avoid-break">
+          <div class="block-title">
+            <span class="block-num">II</span>
+            <h3>TABLEAU DE BORD EXÉCUTIF DE CONFORMITÉ</h3>
+          </div>
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-label">SCORE GLOBAL DE CONFORMITÉ</div>
+              <div class="kpi-val">${globalPct}%</div>
+              <div class="kpi-sub">${totalOui} critères conformes sur ${totalCrit}</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">NIVEAU D'ACCRÉDITATION ATTRIBUÉ</div>
+              <div class="kpi-val level-val">Niveau ${levelNum} / 5</div>
+              <div class="kpi-sub">${levelText}</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">RÉPARTITION DES CRITÈRES</div>
+              <div class="kpi-val" style="font-size:1.35rem; color:#334155; margin-top:6px;">
+                <span style="color:#16a34a;">${totalOui} Oui</span> • 
+                <span style="color:#d97706;">${totalPartiel} Part.</span> • 
+                <span style="color:#dc2626;">${totalNon} Non</span>
+              </div>
+              <div class="kpi-sub">${evaluatedCount} domaine(s) audité(s) sur 9</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3 : Tableau récapitulatif des 9 Références -->
+        <div class="report-block avoid-break">
+          <div class="block-title">
+            <span class="block-num">III</span>
+            <h3>MATRICE DE CONFORMITÉ DES 9 RÉFÉRENCES NATIONALES GRI</h3>
+          </div>
+          <table class="report-data-table">
+            <thead>
+              <tr>
+                <th style="width:70px;">Réf.</th>
+                <th class="th-left">Domaine d'Évaluation Officiel</th>
+                <th style="width:65px;">Critères</th>
+                <th style="width:55px;">Oui</th>
+                <th style="width:65px;">Partiel</th>
+                <th style="width:55px;">Non</th>
+                <th style="width:70px;">Score %</th>
+                <th style="width:110px;">Statut</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${tableRowsHtml}
+            </tbody>
+            <tfoot>
+              <tr style="background:#f1f5f9; font-weight:800; border-top:2px solid #cbd5e1;">
+                <td colspan="2" class="td-left" style="font-weight:900; color:#1e3a8a;">SYNTHÈSE NATIONALE CONSOLIDÉE</td>
+                <td style="font-weight:900;">${totalCrit}</td>
+                <td class="badge-oui">${totalOui}</td>
+                <td class="badge-partiel">${totalPartiel}</td>
+                <td class="badge-non">${totalNon}</td>
+                <td style="font-weight:900; color:#1e3a8a; font-family:'JetBrains Mono', monospace;">${globalPct}%</td>
+                <td><span class="status-pill pill-green">Niveau ${levelNum}</span></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <!-- Section 4 : Synthèses détaillées par domaine -->
+        <div class="report-block page-break-before">
+          <div class="block-title">
+            <span class="block-num">IV</span>
+            <h3>SYNTHÈSES ANALYTIQUES DÉTAILLÉES PAR DOMAINE AUDITÉ</h3>
+          </div>
+          ${detailedSynthesesHtml}
+        </div>
+
+        <!-- Section 5 : Analyse qualitative et IA -->
+        <div class="report-block avoid-break">
+          <div class="block-title">
+            <span class="block-num">V</span>
+            <h3>ANALYSE QUALITATIVE GLOBALE & PLAN D'ACTION STRATÉGIQUE</h3>
+          </div>
+          <div class="report-strategic-box">
+            ${strategicHtml}
+          </div>
+        </div>
+
+        <!-- Section 6 : Conclusions & Recommandations Officielles -->
+        <div class="report-block avoid-break">
+          <div class="block-title">
+            <span class="block-num">VI</span>
+            <h3>CONCLUSIONS & RECOMMANDATIONS INSTITUTIONNELLES DE L'AccrediX</h3>
+          </div>
+          <div class="conclusions-container">
+            <h4>Avis Préliminaire de la Commission Nationale d'Accréditation :</h4>
+            <p>
+              Considérant les résultats de l'auto-évaluation enregistrés pour l'établissement <strong>${hospName}</strong> (Taux de conformité de <strong>${globalPct}%</strong>, classé au <strong>Niveau ${levelNum}</strong>), 
+              la Commission d'Accréditation émet un <strong>avis favorable sous réserve de la mise en oeuvre des mesures correctives prioritaires</strong> ci-dessous mentionnées :
+            </p>
+            <ul class="conclusions-list">
+              <li><strong>Formalisation institutionnelle :</strong> Finaliser l'approbation formelle du règlement intérieur et du manuel de gestion des risques infectieux par la direction générale.</li>
+              <li><strong>Activité des instances :</strong> Maintenir un rythme de réunion trimestriel du CLPIAS et de l'EOHH, avec formalisation systématique des procès-verbaux et rapports annuels d'activité.</li>
+              <li><strong>Renforcement de la formation :</strong> Assurer la formation de 100% des personnels nouvellement recrutés aux précautions standard et au bon usage des antimicrobiens.</li>
+              <li><strong>Surveillance et traçabilité :</strong> Mettre en place un registre d'audit régulier de l'hygiène des mains et des accidents d'exposition au sang (AES).</li>
+            </ul>
+            <div class="conclusions-notice">
+              ⚖️ <strong>Disposition réglementaire :</strong> Le présent rapport officiel constitue le document d'étape obligatoire préalable à la désignation de l'équipe des experts-visiteurs de l'AccrediX pour l'audit sur site.
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 7 : Validation et Signatures -->
+        <div class="report-block avoid-break">
+          <div class="block-title">
+            <span class="block-num">VII</span>
+            <h3>VALIDATION OFFICIELLE & APPROBATION DES PARTIES</h3>
+          </div>
+          <p class="signatures-note">
+            En apposant leurs visas, les représentants ci-dessous certifient l'exactitude des informations transmises dans le cadre du processus d'accréditation AccrediX.
+          </p>
+          <div class="signatures-grid">
+            <div class="sig-box">
+              <div>
+                <div class="sig-title">Pour l'Établissement Hospitalier</div>
+                <div class="sig-role">La Direction Générale & le Comité Qualité / GRI</div>
+                <div class="sig-name">${hospName}</div>
+              </div>
+              <div>
+                <div class="sig-field">Date et Signature :</div>
+                <div class="sig-line"></div>
+                <div class="sig-stamp">[ Emplacement Cachet de l'Établissement ]</div>
+              </div>
+            </div>
+            <div class="sig-box">
+              <div>
+                <div class="sig-title">Pour AccrediX</div>
+                <div class="sig-role">La Direction de l'Évaluation et de l'Accréditation</div>
+                <div class="sig-name">Commission Nationale d'Accréditation GRI</div>
+              </div>
+              <div>
+                <div class="sig-field">Date, Visa et Homologation :</div>
+                <div class="sig-line"></div>
+                <div class="sig-stamp">[ Sceau Officiel de l'AccrediX ]</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pied de page officiel -->
+        <div class="gov-footer avoid-break">
+          <div class="footer-line"></div>
+          <div class="footer-content">
+            <span> Système National d'Accréditation des Établissements de Santé — République Tunisienne</span>
+            <span>AccrediX — Portail National d'Auto-Évaluation GRI</span>
+            <span>Réf. Dossier : AccrediX-GRI-2026-${hospId.toUpperCase()}</span>
+          </div>
+        </div>
+      `;
+
+      const toolbarHosp = document.getElementById('reportToolbarHospital');
+      if (toolbarHosp) toolbarHosp.textContent = `${hospName} (${hospType} — ${hospCity})`;
+    }
+
+    function openOfficialReportModal() {
+      buildOfficialReport();
+      const modal = document.getElementById('officialReportModal');
+      if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeOfficialReport() {
+      const modal = document.getElementById('officialReportModal');
+      if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+    }
+
+    function printOfficialReport() {
+      buildOfficialReport();
+      const modal = document.getElementById('officialReportModal');
+      if (modal) modal.style.display = 'block';
+      const prevTitle = document.title;
+      const hospNameClean = (currentHospital || 'Etablissement').replace(/[^a-zA-Z0-9]/g, '_');
+      document.title = `Rapport_Officiel_GRI_${hospNameClean}_AccrediX_2026`;
+      setTimeout(() => {
+        window.print();
+        setTimeout(() => {
+          document.title = prevTitle;
+        }, 1000);
+      }, 150);
+    }
+
+    function resetAll() {
+      if (!confirm("Voulez-vous vraiment réinitialiser toutes les données d'évaluation de cet établissement ?")) return;
+      sharedDocs = {};
+      evalResults = {};
+      syntheses = {};
+      if (currentHospital && hospitals[currentHospital]) {
+        hospitals[currentHospital] = { sharedDocs: {}, evalResults: {}, syntheses: {}, currentRef: REF_KEYS[0], finalReport: null };
+      }
+      renderAll();
+      updateDashboard();
+      renderReport();
+      saveState();
+    }
+
+    function applyReadOnlyMode(isExpired = false) {
+      const isAdmin = (role === 'admin');
+      if (isAdmin) {
+        const adminBanner = document.getElementById('adminReadOnlyBanner');
+        if (adminBanner) adminBanner.style.display = 'flex';
+      }
+
+      if (isAdmin || isExpired) {
+        document.querySelectorAll('.rating-btn').forEach(btn => {
+          btn.style.pointerEvents = 'none';
+          btn.style.opacity = '0.7';
+        });
+
+        document.querySelectorAll('.crit-proof-box textarea, input[type="file"], select').forEach(el => {
+          if (el.id !== 'discussionInput') {
+            el.disabled = true;
+          }
+        });
+
+        ['analyzeBtn', 'syntheseBtn', 'generateFinalReportBtn', 'resetAllBtn', 'addHospitalBtn'].forEach(id => {
+          const b = document.getElementById(id);
+          if (b) {
+            b.disabled = true;
+            b.style.opacity = '0.5';
+            b.style.cursor = 'not-allowed';
+          }
+        });
+      }
+    }
+
+    async function checkHospitalDeadline(targetId) {
+      if (!targetId || !token) return;
+      try {
+        const res = await fetch('/api/hospital/' + targetId, {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        window.currentHospitalData = data;
+        window.isCurrentHospitalExpired = !!data.isExpired;
+        const banner = document.getElementById('evalDeadlineBanner');
+        const daysLabel = document.getElementById('evalDeadlineDays');
+        const badge = document.getElementById('evalDeadlineStatusBadge');
+
+        if (banner && daysLabel && badge) {
+          banner.style.display = 'flex';
+          const daysLeft = data.daysRemaining !== undefined ? data.daysRemaining : 15;
+          if (data.isExpired) {
+            banner.style.background = '#fef2f2';
+            banner.style.borderColor = '#fecaca';
+            banner.style.color = '#991b1b';
+            daysLabel.style.color = '#dc2626';
+            daysLabel.textContent = "Le délai de 15 jours accordé par l'AccrediX est expiré. Les modifications ne sont plus autorisées.";
+            badge.style.background = '#dc2626';
+            badge.textContent = "⚠️ Expiré";
+            if (role === 'hospital') {
+              applyReadOnlyMode(true);
+            }
+          } else {
+            daysLabel.textContent = `Il reste ${daysLeft} jour(s) sur 15 pour compléter et valider l'auto-évaluation.`;
+            badge.textContent = `⏳ ${daysLeft} Jours Restants`;
+          }
+        }
+      } catch (e) {
+        console.error("Erreur décompte 15 jours", e);
+      }
+    }
+
+    async function fetchDiscussions() {
+      const targetId = paramHospitalId || hospitalId || currentHospital;
+      if (!targetId || !token) return;
+      try {
+        const res = await fetch('/api/discussions/' + encodeURIComponent(targetId), {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (!res.ok) return;
+        const msgs = await res.json();
+        renderDiscussions(msgs);
+      } catch (e) {
+        console.error("Erreur chargement discussion", e);
+      }
+    }
+
+    function renderDiscussions(msgs) {
+      const container = document.getElementById('discussionMessages');
+      if (!container) return;
+
+      if (!msgs || msgs.length === 0) {
+        container.innerHTML = '<div style="text-align:center; padding:24px; color:var(--text-muted); font-size:0.875rem;">Aucun message échangé pour le moment. Rédigez le premier message ci-dessous.</div>';
+        return;
+      }
+
+      container.innerHTML = msgs.map(m => {
+        const isAdmin = m.senderRole === 'admin';
+        const bg = isAdmin ? '#eff6ff' : '#f8fafc';
+        const border = isAdmin ? '#bfdbfe' : '#e2e8f0';
+        const badgeColor = isAdmin ? '#1e40af' : '#0f766e';
+        const badgeBg = isAdmin ? '#dbeafe' : '#ccfbf1';
+        const roleLabel = isAdmin ? '🛡️ AccrediX Admin' : '🏥 Établissement';
+        const timeStr = new Date(m.timestamp).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' });
+
+        return `
+          <div style="background: ${bg}; border: 1px solid ${border}; border-radius: 12px; padding: 14px 18px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <span style="background: ${badgeBg}; color: ${badgeColor}; font-size: 0.75rem; font-weight: 800; padding: 3px 10px; border-radius: 12px;">
+                ${roleLabel} — ${m.senderName}
+              </span>
+              <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500;">${timeStr}</span>
+            </div>
+            <div style="font-size: 0.9rem; color: #0f172a; line-height: 1.5; white-space: pre-wrap;">${m.text}</div>
+          </div>
+        `;
+      }).join('');
+
+      container.scrollTop = container.scrollHeight;
+    }
+
+    async function sendDiscussionMessage() {
+      const input = document.getElementById('discussionInput');
+      const text = input ? input.value.trim() : '';
+      if (!text) return;
+
+      const targetId = paramHospitalId || hospitalId || currentHospital;
+      if (!targetId || !token) return;
+
+      const btn = document.getElementById('sendDiscussionBtn');
+      if (btn) btn.disabled = true;
+
+      try {
+        const res = await fetch('/api/discussions/' + encodeURIComponent(targetId), {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify({ text })
+        });
+
+        if (!res.ok) throw new Error("Impossible d'envoyer le message.");
+
+        if (input) input.value = '';
+        await fetchDiscussions();
+      } catch (e) {
+        alert(e.message);
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    }
+
+    function scrollToDiscussion() {
+      const panel = document.getElementById('discussionPanel');
+      if (panel) {
+        panel.scrollIntoView({ behavior: 'smooth' });
+        const input = document.getElementById('discussionInput');
+        if (input) setTimeout(() => input.focus(), 300);
+      }
+    }
+
+    document.getElementById('analyzeBtn').addEventListener('click', analyzeReference);
+    document.getElementById('syntheseBtn').addEventListener('click', generateSynthese);
+    document.getElementById('generateFinalReportBtn').addEventListener('click', generateFinalReport);
+    document.getElementById('printSelectedRefBtn').addEventListener('click', printSelectedReference);
+    document.getElementById('resetAllBtn').addEventListener('click', resetAll);
+
+    (async function initPage() {
+      if (window.location.protocol === 'file:') {
+        document.getElementById('fileProtocolWarning').style.display = 'block';
+      }
+
+      let activeHospName = paramHospitalName || storedName;
+      const targetId = paramHospitalId || hospitalId;
+
+      if (targetId) {
+        const serverData = await loadServerEvaluation(targetId);
+        if (serverData) {
+          evalResults = serverData.evalResults || {};
+          sharedDocs = serverData.sharedDocs || {};
+          syntheses = serverData.syntheses || {};
+        }
+        await checkHospitalDeadline(targetId);
+        await fetchDiscussions();
+      }
+
+      if (role === 'admin') {
+        applyReadOnlyMode(false);
+      }
+
+      if (!activeHospName && role === 'hospital') {
+        activeHospName = storedName || "Hôpital Alpha (CHU)";
+      }
+
+      if (activeHospName) {
+        initHospital(activeHospName);
+      } else {
+        document.getElementById('hospitalSelector').style.display = 'block';
+      }
+
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('viewReport') === '1') {
+        setTimeout(() => openOfficialReportModal(), 600);
+      }
+    })();
+  </script>
+</body>
+
+</html>
